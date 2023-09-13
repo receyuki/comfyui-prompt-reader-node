@@ -1,4 +1,4 @@
 [submodule "stable-diffusion-prompt-reader"]
 	path = stable_diffusion_prompt_reader
 	url = https://github.com/receyuki/stable-diffusion-prompt-reader.git
-    tag = v1.3.3-post.1
+    branch = feature/comfyui-node
