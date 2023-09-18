@@ -107,11 +107,11 @@ class SDPromptReader:
                 output_to_terminal(MESSAGE["format_error"][1])
                 raise ValueError(MESSAGE["format_error"][1])
 
-            seed = int(image_data.parameter.get("seed"))
-            steps = int(image_data.parameter.get("steps"))
-            cfg = float(image_data.parameter.get("cfg"))
-            width = int(image_data.width)
-            height = int(image_data.height)
+            seed = int(image_data.parameter.get("seed") or 0)
+            steps = int(image_data.parameter.get("steps") or 0)
+            cfg = float(image_data.parameter.get("cfg") or 0)
+            width = int(image_data.width or 0)
+            height = int(image_data.height or 0)
 
             output_to_terminal("Positive: \n" + image_data.positive)
             output_to_terminal("Negative: \n" + image_data.negative)
