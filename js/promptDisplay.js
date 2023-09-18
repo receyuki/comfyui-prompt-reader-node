@@ -20,10 +20,9 @@ app.registerExtension({
                 const result = onNodeCreated?.apply(this, arguments);
 
                 // Create prompt and setting widgets
-                const positive = createWidget(app, this, "text");
-                const negative = createWidget(app, this, "text");
-                const setting = createWidget(app, this, "text");
-
+                const positive = createWidget(app, this, "positive");
+                const negative = createWidget(app, this, "negative");
+                const setting = createWidget(app, this, "setting");
                 // Resize the node
                 const nodeWidth = this.size[0];
                 const nodeHeight = this.size[1];
