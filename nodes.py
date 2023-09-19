@@ -4,7 +4,6 @@
 @nickname: SD Prompt Reader
 @description: ComfyUI node version of SD Prompt Reader
 """
-import hashlib
 
 from .stable_diffusion_prompt_reader.sd_prompt_reader.constants import (
     SUPPORTED_FORMATS,
@@ -107,9 +106,15 @@ class SDPromptReader:
                 output_to_terminal(MESSAGE["format_error"][1])
                 raise ValueError(MESSAGE["format_error"][1])
 
-            seed = int(image_data.parameter.get("seed") or 0)
-            steps = int(image_data.parameter.get("steps") or 0)
-            cfg = float(image_data.parameter.get("cfg") or 0)
+            seed = int(
+                self.param_parser(image_data.parameter.get("seed"), data_index) or 0
+            )
+            steps = int(
+                self.param_parser(image_data.parameter.get("steps"), data_index) or 0
+            )
+            cfg = float(
+                self.param_parser(image_data.parameter.get("cfg"), data_index) or 0
+            )
             width = int(image_data.width or 0)
             height = int(image_data.height or 0)
 
@@ -134,13 +139,17 @@ class SDPromptReader:
             ),
         }
 
+    @staticmethod
+    def param_parser(data: str, index: int):
+        data_list = data.strip("()").split(",")
+        return data_list[0] if len(data_list) == 1 else data_list[index]
+
     @classmethod
     def IS_CHANGED(s, image, data_index):
         image_path = folder_paths.get_annotated_filepath(image)
-        m = hashlib.sha256()
-        with open(image_path, "rb") as f:
-            m.update(f.read())
-        return m.digest().hex()
+        with open(Path(image_path), "rb") as f:
+            image_data = ImageDataReader(f)
+        return image_data.props
 
     @classmethod
     def VALIDATE_INPUTS(s, image, data_index):
