@@ -33,6 +33,8 @@ from .stable_diffusion_prompt_reader.sd_prompt_reader.image_data_reader import (
 )
 from .stable_diffusion_prompt_reader.sd_prompt_reader.__version__ import VERSION
 
+import time
+
 BLUE = "\033[1;34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
@@ -90,7 +92,7 @@ class SDPromptReader:
     )
 
     FUNCTION = "load_image"
-    CATEGORY = "image"
+    CATEGORY = "SDPromptReader"
     OUTPUT_NODE = True
 
     def load_image(self, image, data_index):
@@ -218,6 +220,7 @@ class SDPromptSaver:
                     "INT",
                     {"default": 0, "min": 1, "max": MAX_RESOLUTION, "step": 8},
                 ),
+                "calculate_model_hash": ("BOOLEAN", {"default": False}),
                 "lossless_webp": ("BOOLEAN", {"default": True}),
                 "jpg_webp_quality": ("INT", {"default": 100, "min": 1, "max": 100}),
             },
@@ -229,7 +232,7 @@ class SDPromptSaver:
 
     OUTPUT_NODE = True
 
-    CATEGORY = "image"
+    CATEGORY = "SDPromptReader"
 
     def save_images(
         self,
@@ -246,6 +249,7 @@ class SDPromptSaver:
         extension: str = "png",
         width: int = 0,
         height: int = 0,
+        calculate_model_hash: bool = False,
         lossless_webp: bool = True,
         jpg_webp_quality: int = 100,
         prompt=None,
@@ -262,7 +266,6 @@ class SDPromptSaver:
             filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0]
         )
         results = list()
-
         for image in images:
             i = 255.0 * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
@@ -275,11 +278,10 @@ class SDPromptSaver:
                 f"CFG scale: {cfg}, "
                 f"Seed: {seed}, "
                 f"Size: {img.width if width==0 else width}x{img.height if height==0 else height}, "
-                f"Model hash: {self.calculate_shorthash(model_name)}, "
-                f"Model: {Path(model_name).stem}, "
-                f"Version: ComfyUI"
+                f"Model hash: {self.calculate_model_hash(model_name)}, "
+                if calculate_model_hash
+                else "" f"Model: {Path(model_name).stem}, " f"Version: ComfyUI"
             )
-
             file = Path(full_output_folder) / f"{filename}_{counter:05}_.{extension}"
             if extension == "png":
                 if not args.disable_metadata:
@@ -290,7 +292,6 @@ class SDPromptSaver:
                     if extra_pnginfo is not None:
                         for x in extra_pnginfo:
                             metadata.add_text(x, json.dumps(extra_pnginfo[x]))
-
                 img.save(
                     file,
                     pnginfo=metadata,
@@ -308,9 +309,7 @@ class SDPromptSaver:
                             },
                         }
                     )
-                    print(str(file))
                     piexif.insert(metadata, str(file))
-
             results.append(
                 {"filename": file.name, "subfolder": subfolder, "type": self.type}
             )
@@ -319,7 +318,7 @@ class SDPromptSaver:
         return {"ui": {"images": results}}
 
     @staticmethod
-    def calculate_shorthash(model_name):
+    def calculate_model_hash(model_name):
         hash_sha256 = hashlib.sha256()
         blksize = 1024 * 1024
         file_name = folder_paths.get_full_path("checkpoints", model_name)
@@ -331,9 +330,127 @@ class SDPromptSaver:
         return hash_sha256.hexdigest()[:10]
 
 
-NODE_CLASS_MAPPINGS = {"SDPromptReader": SDPromptReader, "SDPromptSaver": SDPromptSaver}
+class SDParameterGenerator:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "ckpt_name": (folder_paths.get_filename_list("checkpoints"),),
+                "with_config": ("BOOLEAN", {"default": False}),
+                "config_name": (folder_paths.get_filename_list("configs"),),
+            },
+            "optional": {
+                "seed": (
+                    "INT",
+                    {"default": 0, "min": 0, "max": 0xFFFFFFFFFFFFFFFF},
+                ),
+                "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
+                "cfg": (
+                    "FLOAT",
+                    {
+                        "default": 8.0,
+                        "min": 0.0,
+                        "max": 100.0,
+                        "step": 0.5,
+                        "round": 0.01,
+                    },
+                ),
+                "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+                "width": (
+                    "INT",
+                    {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                ),
+                "height": (
+                    "INT",
+                    {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                ),
+            },
+        }
+
+    RETURN_TYPES = (
+        "MODEL",
+        "CLIP",
+        "VAE",
+        folder_paths.get_filename_list("checkpoints"),
+        "INT",
+        "INT",
+        "FLOAT",
+        comfy.samplers.KSampler.SAMPLERS,
+        comfy.samplers.KSampler.SCHEDULERS,
+        "INT",
+        "INT",
+    )
+
+    RETURN_NAMES = (
+        "MODEL",
+        "CLIP",
+        "VAE",
+        "MODEL_NAME",
+        "SEED",
+        "STEPS",
+        "CFG",
+        "SAMPLER_NAME",
+        "SCHEDULER",
+        "WIDTH",
+        "HEIGHT",
+    )
+    FUNCTION = "generate_parameter"
+
+    CATEGORY = "SDPromptReader"
+
+    def generate_parameter(
+        self,
+        ckpt_name,
+        with_config,
+        config_name,
+        seed,
+        steps,
+        cfg,
+        sampler_name,
+        scheduler,
+        width,
+        height,
+        output_vae=True,
+        output_clip=True,
+    ):
+        config_path = folder_paths.get_full_path("configs", config_name)
+        ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
+        if with_config:
+            checkpoint = comfy.sd.load_checkpoint(
+                config_path,
+                ckpt_path,
+                output_vae=True,
+                output_clip=True,
+                embedding_directory=folder_paths.get_folder_paths("embeddings"),
+            )
+        else:
+            checkpoint = comfy.sd.load_checkpoint_guess_config(
+                ckpt_path,
+                output_vae=True,
+                output_clip=True,
+                embedding_directory=folder_paths.get_folder_paths("embeddings"),
+            )[:3]
+        return checkpoint + (
+            ckpt_name,
+            seed,
+            steps,
+            cfg,
+            sampler_name,
+            scheduler,
+            width,
+            height,
+        )
+
+
+NODE_CLASS_MAPPINGS = {
+    "SDPromptReader": SDPromptReader,
+    "SDPromptSaver": SDPromptSaver,
+    "SDParameterGenerator": SDParameterGenerator,
+}
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "SDPromptReader": "SD Prompt Reader",
     "SDPromptSaver": "SD Prompt Saver",
+    "SDParameterGenerator": "SD Parameter Generator",
 }
