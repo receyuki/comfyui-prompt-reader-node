@@ -270,6 +270,11 @@ class SDPromptSaver:
             i = 255.0 * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             metadata = None
+            model_hash = (
+                f"Model hash: {self.calculate_model_hash(model_name)}, "
+                if calculate_model_hash
+                else ""
+            )
             comment = (
                 f"{positive}\n"
                 f"Negative prompt: {negative}\n"
@@ -278,9 +283,9 @@ class SDPromptSaver:
                 f"CFG scale: {cfg}, "
                 f"Seed: {seed}, "
                 f"Size: {img.width if width==0 else width}x{img.height if height==0 else height}, "
-                f"Model hash: {self.calculate_model_hash(model_name)}, "
-                if calculate_model_hash
-                else "" f"Model: {Path(model_name).stem}, " f"Version: ComfyUI"
+                f"{model_hash}"
+                f"Model: {Path(model_name).stem}, "
+                f"Version: ComfyUI"
             )
             file = Path(full_output_folder) / f"{filename}_{counter:05}_.{extension}"
             if extension == "png":
