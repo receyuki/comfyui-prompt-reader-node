@@ -335,6 +335,32 @@ class SDPromptSaver:
         return hash_sha256.hexdigest()[:10]
 
 
+class SDPromptMerger:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "text_g": (
+                    "STRING",
+                    {"default": "", "multiline": True, "forceInput": True},
+                ),
+                "text_l": (
+                    "STRING",
+                    {"default": "", "multiline": True, "forceInput": True},
+                ),
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    FUNCTION = "merge_prompt"
+    CATEGORY = "SDPromptReader"
+
+    def merge_prompt(self, text_g, text_l):
+        if text_l == "":
+            return text_g
+        return (text_g + "\n" + text_l,)
+
+
 class SDParameterGenerator:
     @classmethod
     def INPUT_TYPES(s):
@@ -451,11 +477,13 @@ class SDParameterGenerator:
 NODE_CLASS_MAPPINGS = {
     "SDPromptReader": SDPromptReader,
     "SDPromptSaver": SDPromptSaver,
+    "SDPromptMerger": SDPromptMerger,
     "SDParameterGenerator": SDParameterGenerator,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "SDPromptReader": "SD Prompt Reader",
     "SDPromptSaver": "SD Prompt Saver",
+    "SDPromptMerger": "SD Prompt Merger",
     "SDParameterGenerator": "SD Parameter Generator",
 }
