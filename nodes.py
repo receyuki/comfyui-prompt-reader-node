@@ -31,9 +31,11 @@ from .stable_diffusion_prompt_reader.sd_prompt_reader.constants import (
 from .stable_diffusion_prompt_reader.sd_prompt_reader.image_data_reader import (
     ImageDataReader,
 )
-from .stable_diffusion_prompt_reader.sd_prompt_reader.__version__ import VERSION
 
-import time
+from .__version__ import VERSION as NODE_VERSION
+from .stable_diffusion_prompt_reader.sd_prompt_reader.__version__ import (
+    VERSION as CORE_VERSION,
+)
 
 BLUE = "\033[1;34m"
 CYAN = "\033[36m"
@@ -44,7 +46,8 @@ def output_to_terminal(text: str):
     print(f"{RESET+BLUE}" f"[SD Prompt Reader] " f"{CYAN+text+RESET}")
 
 
-output_to_terminal("Reader core version: " + VERSION)
+output_to_terminal("Node version: " + NODE_VERSION)
+output_to_terminal("Core version: " + CORE_VERSION)
 
 
 class SDPromptReader:
