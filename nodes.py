@@ -2,7 +2,7 @@
 @author: receyuki
 @title: SD Prompt Reader
 @nickname: SD Prompt Reader
-@description: ComfyUI node version of SD Prompt Reader
+@description: ComfyUI node version of the SD Prompt Reader
 """
 
 
@@ -95,7 +95,7 @@ class SDPromptReader:
     )
 
     FUNCTION = "load_image"
-    CATEGORY = "SDPromptReader"
+    CATEGORY = "SD Prompt Reader"
     OUTPUT_NODE = True
 
     def load_image(self, image, data_index):
@@ -235,7 +235,7 @@ class SDPromptSaver:
 
     OUTPUT_NODE = True
 
-    CATEGORY = "SDPromptReader"
+    CATEGORY = "SD Prompt Reader"
 
     def save_images(
         self,
@@ -356,7 +356,7 @@ class SDPromptMerger:
 
     RETURN_TYPES = ("STRING",)
     FUNCTION = "merge_prompt"
-    CATEGORY = "SDPromptReader"
+    CATEGORY = "SD Prompt Reader"
 
     def merge_prompt(self, text_g, text_l):
         if text_l == "":
@@ -431,7 +431,7 @@ class SDParameterGenerator:
     )
     FUNCTION = "generate_parameter"
 
-    CATEGORY = "SDPromptReader"
+    CATEGORY = "SD Prompt Reader"
 
     def generate_parameter(
         self,
