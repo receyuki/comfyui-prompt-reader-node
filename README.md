@@ -48,7 +48,7 @@ Search for `SD Prompt Reader` in the ComfyUI Manager and install it.
 1. `cd` to the `custom_node` folder
 2. Clone this repo
     ```shell
-    git clone https://github.com/receyuki/comfyui-prompt-reader-node.git
+    git clone --recursive https://github.com/receyuki/comfyui-prompt-reader-node.git
     ```
 3. Install dependencies
     ```shell
