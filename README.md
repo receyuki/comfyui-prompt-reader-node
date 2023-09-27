@@ -5,7 +5,7 @@
         <img alt="GitHub" src="https://img.shields.io/github/license/receyuki/comfyui-prompt-reader-node"></a>
     <img alt="GitHub tag (with filter)" src="https://img.shields.io/github/v/tag/receyuki/comfyui-prompt-reader-node?label=node">
     <a href="https://github.com/receyuki/stable-diffusion-prompt-reader">    
-        <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/receyuki/stable-diffusion-prompt-reader?label=core"></a>
+        <img alt="GitHub tag (with filter)" src="https://img.shields.io/github/v/tag/receyuki/stable-diffusion-prompt-reader?label=core"></a>
     <a href="https://github.com/psf/black">
         <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
     <br><br>
@@ -95,7 +95,7 @@ combine text_g and text_l into a single prompt.
    <img src="./images/generator_saver_merger.png" width="60%" height="60%" alt="generator, saver and merger node">
 </div>
 
-### [example_workflow.json](./workflows/example_workflow.json)
+### [Example Workflow](./workflows/example_workflow.json)
 <div align="center">
    <img src="./images/example_workflow.png" width="100%" height="100%" alt="example workflow">
 </div>
