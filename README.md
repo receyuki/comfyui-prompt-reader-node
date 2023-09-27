@@ -91,11 +91,11 @@ the Prompt Saver Node and KSampler.
 - Since the A1111 format cannot store text_g and text_l separately, SDXL users need to use the Prompt Merger Node to 
 combine text_g and text_l into a single prompt.
 
-<div style="text-align:center;">
-<img src="./images/generator_saver_merger.png" width="60%" height="60%" alt="generator, saver and merger node">
+<div align="center">
+   <img src="./images/generator_saver_merger.png" width="60%" height="60%" alt="generator, saver and merger node">
 </div>
 
-### <a href="./workflows/example_workflow.json" download>Example Workflow</a>
+### [example_workflow.json](./workflows/example_workflow.json)
 <div align="center">
    <img src="./images/example_workflow.png" width="100%" height="100%" alt="example workflow">
 </div>
