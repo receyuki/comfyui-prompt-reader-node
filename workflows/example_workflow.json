@@ -1,6 +1,6 @@
 {
-  "last_node_id": 10,
-  "last_link_id": 33,
+  "last_node_id": 11,
+  "last_link_id": 44,
   "nodes": [
     {
       "id": 4,
@@ -72,47 +72,6 @@
         512,
         1
       ]
-    },
-    {
-      "id": 6,
-      "type": "VAEDecode",
-      "pos": [
-        900,
-        470
-      ],
-      "size": {
-        "0": 320,
-        "1": 50
-      },
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 21
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 8
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            22
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode"
-      }
     },
     {
       "id": 5,
@@ -270,7 +229,7 @@
       },
       "widgets_values": [
         "enable",
-        224393857152127,
+        368865854415352,
         "randomize",
         20,
         8,
@@ -282,7 +241,111 @@
       ]
     },
     {
-      "id": 3,
+      "id": 9,
+      "type": "CLIPTextEncode",
+      "pos": [
+        530,
+        280
+      ],
+      "size": {
+        "0": 320,
+        "1": 54
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 6
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "text",
+            "config": [
+              "STRING",
+              {
+                "multiline": true
+              }
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            11
+          ],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 10,
+      "type": "CLIPTextEncode",
+      "pos": [
+        530,
+        410
+      ],
+      "size": {
+        "0": 320,
+        "1": 54
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 7
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 5,
+          "widget": {
+            "name": "text",
+            "config": [
+              "STRING",
+              {
+                "multiline": true
+              }
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            12
+          ],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 11,
       "type": "SDPromptSaver",
       "pos": [
         1270,
@@ -290,7 +353,7 @@
       ],
       "size": {
         "0": 320,
-        "1": 460
+        "1": 530
       },
       "flags": {},
       "order": 7,
@@ -299,13 +362,12 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 22,
-          "slot_index": 0
+          "link": 44
         },
         {
           "name": "model_name",
           "type": "CheckpointYesmix_v20.safetensors,Chilloutmix-Ni.safetensors,CounterfeitV30_v30.safetensors,OldFish_2348V12.safetensors,abyssorangemix2_Hard.safetensors,abyssorangemix2_Hard.vae.pt,alstroemeriaMix_v10.safetensors,alstroemeriaMix_v10.vae.ckpt,aoaokoPVCStyleModel_pvcAOAOKO.safetensors,appIcons_v2.ckpt,architecturerealmix_v1repair.safetensors,betterPinkPussy_v01.safetensors,bokomix2_v20.safetensors,cetusMix_Coda2.safetensors,cetusMix_Coda2.vae.pt,cetusMix_Whalefall2.safetensors,cetusMix_Whalefall2.vae.pt,cetusMix_v4.safetensors,cetusMix_v4.vae.pt,cheeseDaddysLandscapes_35FP16.safetensors,chikmix_V3.safetensors,chilloutmix_NiPrunedFp16Fix.safetensors,chilloutmix_NiPrunedFp32Fix.safetensors,cinematicDiffusion_v1.ckpt,dalcefoPainting_2nd.safetensors,dalcefoPainting_3rd.safetensors,dalcefoV3Painting_dalcefoV3Painting.safetensors,dosmix_.safetensors,dreamlikeDiffusion10_10.ckpt,dreamlikePhotoreal20_dreamlikePhotoreal20.safetensors,dvarchMultiPrompt_dvarchExterior.safetensors,dvarchMultiPrompt_dvarchInterior.safetensors,expmixLine_v20.safetensors,facebombmix_v1Bakedvae.safetensors,fantexiV08.safetensors,fantexiV08a.safetensors,fantexiV08c.safetensors,fantexiV09beta.ckpt,fantexiV09beta.vae.ckpt,gdmLuxuryModernHouseAnd_v10.ckpt,ghostmix_v20Bakedvae.safetensors,grapefruitHentaiModel_grapefruitv41.safetensors,guofeng3_v32Light.safetensors,hassakuHentaiModel_v13.safetensors,inkpunkDiffusion_v2.ckpt,izumi_01Safetensors.safetensors,knollingcase_v1.ckpt,landscapesupermix_v21.safetensors,majicmixRealistic_v6.safetensors,majicmixSombre_v20.safetensors,meichidarkMix_meichidarkV4.safetensors,meinahentai_v4.safetensors,meinamix_meinaV11.safetensors,newmarsmix_25D.safetensors,newmarsmix_25D.vae.pt,newmarsmix_N.safetensors,newmarsmix_R11.safetensors,nudify_xl.safetensors,orangehardBasil05_v10.safetensors,perfectWorld_perfectWorldBakedVAE.safetensors,perfectWorld_v2Baked.safetensors,perfectWorld_v3Baked.safetensors,perfectWorld_v4Baked.safetensors,perfectWorld_v5Baked.safetensors,protogenV22Anime_22.safetensors,roboeticinkpunkdream_shaperchromav510.safetensors,sd_xl_base_1.0_0.9vae.safetensors,sd_xl_refiner_1.0_0.9vae.safetensors,stablediffusionv1.5.safetensors,sunshinemix_PrunedFp16.safetensors,sunshinemix_sunlightmixPruned.safetensors,uberRealisticPornMerge_urpmv13.safetensors,v2-1_768-ema-pruned-fp16.safetensors,xeroxrealmix_v35.safetensors,xsarchitecturalV1Aerial_v11.ckpt,xsarchitectural_v11.ckpt,xsarchitecturalv1com_v12.ckpt,xsarchitecturalv3com_v31.safetensors,xxmix9realistic_v40.safetensors,yesmix_v16Original.safetensors",
-          "link": 24,
+          "link": 35,
           "widget": {
             "name": "model_name",
             "config": [
@@ -392,12 +454,27 @@
                 "yesmix_v16Original.safetensors"
               ]
             ]
+          },
+          "slot_index": 1
+        },
+        {
+          "name": "model_name_str",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "model_name_str",
+            "config": [
+              "STRING",
+              {
+                "default": ""
+              }
+            ]
           }
         },
         {
           "name": "seed",
           "type": "INT",
-          "link": 25,
+          "link": 36,
           "widget": {
             "name": "seed",
             "config": [
@@ -408,12 +485,13 @@
                 "max": 18446744073709552000
               }
             ]
-          }
+          },
+          "slot_index": 3
         },
         {
           "name": "steps",
           "type": "INT",
-          "link": 26,
+          "link": 37,
           "widget": {
             "name": "steps",
             "config": [
@@ -424,12 +502,13 @@
                 "max": 10000
               }
             ]
-          }
+          },
+          "slot_index": 4
         },
         {
           "name": "cfg",
           "type": "FLOAT",
-          "link": 27,
+          "link": 38,
           "widget": {
             "name": "cfg",
             "config": [
@@ -442,12 +521,13 @@
                 "round": 0.01
               }
             ]
-          }
+          },
+          "slot_index": 5
         },
         {
           "name": "sampler_name",
           "type": "euler,euler_ancestral,heun,dpm_2,dpm_2_ancestral,lms,dpm_fast,dpm_adaptive,dpmpp_2s_ancestral,dpmpp_sde,dpmpp_sde_gpu,dpmpp_2m,dpmpp_2m_sde,dpmpp_2m_sde_gpu,dpmpp_3m_sde,dpmpp_3m_sde_gpu,ddpm,ddim,uni_pc,uni_pc_bh2",
-          "link": 28,
+          "link": 39,
           "widget": {
             "name": "sampler_name",
             "config": [
@@ -474,12 +554,27 @@
                 "uni_pc_bh2"
               ]
             ]
+          },
+          "slot_index": 6
+        },
+        {
+          "name": "sampler_name_str",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "sampler_name_str",
+            "config": [
+              "STRING",
+              {
+                "default": ""
+              }
+            ]
           }
         },
         {
           "name": "scheduler",
           "type": "normal,karras,exponential,sgm_uniform,simple,ddim_uniform",
-          "link": 29,
+          "link": 40,
           "widget": {
             "name": "scheduler",
             "config": [
@@ -492,12 +587,27 @@
                 "ddim_uniform"
               ]
             ]
+          },
+          "slot_index": 8
+        },
+        {
+          "name": "scheduler_str",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "scheduler_str",
+            "config": [
+              "STRING",
+              {
+                "default": ""
+              }
+            ]
           }
         },
         {
           "name": "positive",
           "type": "STRING",
-          "link": 30,
+          "link": 41,
           "widget": {
             "name": "positive",
             "config": [
@@ -507,12 +617,13 @@
                 "multiline": true
               }
             ]
-          }
+          },
+          "slot_index": 10
         },
         {
           "name": "negative",
           "type": "STRING",
-          "link": 31,
+          "link": 42,
           "widget": {
             "name": "negative",
             "config": [
@@ -522,41 +633,8 @@
                 "multiline": true
               }
             ]
-          }
-        },
-        {
-          "name": "width",
-          "type": "INT",
-          "link": 32,
-          "widget": {
-            "name": "width",
-            "config": [
-              "INT",
-              {
-                "default": 0,
-                "min": 1,
-                "max": 8192,
-                "step": 8
-              }
-            ]
-          }
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "link": 33,
-          "widget": {
-            "name": "height",
-            "config": [
-              "INT",
-              {
-                "default": 0,
-                "min": 1,
-                "max": 8192,
-                "step": 8
-              }
-            ]
-          }
+          },
+          "slot_index": 11
         }
       ],
       "properties": {
@@ -565,21 +643,65 @@
       "widgets_values": [
         "ComfyUI",
         "CheckpointYesmix_v20.safetensors",
-        229536272084158,
+        "",
+        540598798977580,
         "randomize",
         20,
         8,
         "euler",
+        "",
         "normal",
         "",
-        "",
         "png",
-        0,
-        0,
+        "0",
+        "png",
+        true,
+        100,
         false,
         true,
-        100
+        true
       ]
+    },
+    {
+      "id": 6,
+      "type": "VAEDecode",
+      "pos": [
+        900,
+        470
+      ],
+      "size": {
+        "0": 320,
+        "1": 50
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 21
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            44
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
     },
     {
       "id": 2,
@@ -709,7 +831,7 @@
             "yesmix_v16Original.safetensors"
           ],
           "links": [
-            24
+            35
           ],
           "shape": 3,
           "slot_index": 3
@@ -719,7 +841,7 @@
           "type": "INT",
           "links": [
             13,
-            25
+            36
           ],
           "shape": 3,
           "slot_index": 4
@@ -762,7 +884,7 @@
           ],
           "links": [
             16,
-            28
+            39
           ],
           "shape": 3,
           "slot_index": 7
@@ -779,7 +901,7 @@
           ],
           "links": [
             17,
-            29
+            40
           ],
           "shape": 3,
           "slot_index": 8
@@ -788,8 +910,7 @@
           "name": "WIDTH",
           "type": "INT",
           "links": [
-            18,
-            32
+            18
           ],
           "shape": 3,
           "slot_index": 9
@@ -798,8 +919,7 @@
           "name": "HEIGHT",
           "type": "INT",
           "links": [
-            19,
-            33
+            19
           ],
           "shape": 3,
           "slot_index": 10
@@ -812,7 +932,7 @@
         "cetusMix_v4.safetensors",
         false,
         "anything_v3.yaml",
-        534500589814738,
+        866778260355172,
         "randomize",
         30,
         7.5,
@@ -840,8 +960,9 @@
         {
           "name": "IMAGE",
           "type": "IMAGE",
-          "links": null,
-          "shape": 3
+          "links": [],
+          "shape": 3,
+          "slot_index": 0
         },
         {
           "name": "MASK",
@@ -854,7 +975,7 @@
           "type": "STRING",
           "links": [
             4,
-            30
+            41
           ],
           "shape": 3,
           "slot_index": 2
@@ -864,7 +985,7 @@
           "type": "STRING",
           "links": [
             5,
-            31
+            42
           ],
           "shape": 3,
           "slot_index": 3
@@ -880,7 +1001,7 @@
           "type": "INT",
           "links": [
             14,
-            26
+            37
           ],
           "shape": 3,
           "slot_index": 5
@@ -890,7 +1011,7 @@
           "type": "FLOAT",
           "links": [
             15,
-            27
+            38
           ],
           "shape": 3,
           "slot_index": 6
@@ -925,110 +1046,6 @@
         "ultra realistic 8k cg, HDR, epic, perfect artwork, masterpiece, perfect face, beautiful face, perfect female body, alluring, perfect female figure, ultra high res, wet oily skin, pink hair, seductive posture, (skindentation:1.3), 1girl, kpop idol, blush, street, raining night, lace trim, choker, close up, long loose revealing dress, (half-length portrait:1.5),",
         "((grayscale)), ((monochrome)), (low quality:2), (normal quality:2), (worst quality:2), lowres, acnes, bad anatomy, bad hands, deformed, error, logo, mosaic censoring, paintings, sketches, skin blemishes, skin spots, text, watermark, easynegative,",
         "Steps: 30, Sampler: DPM++ SDE Karras, CFG scale: 7.5, Seed: 428048546, Size: 512x512, Model hash: 79e42fb744, Model: perfectWorld_v2Baked, Denoising strength: 0.45, Hires upscale: 2, Hires steps: 15, Hires upscaler: R-ESRGAN 4x+"
-      ]
-    },
-    {
-      "id": 9,
-      "type": "CLIPTextEncode",
-      "pos": [
-        530,
-        280
-      ],
-      "size": [
-        320,
-        50
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 6
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 4,
-          "widget": {
-            "name": "text",
-            "config": [
-              "STRING",
-              {
-                "multiline": true
-              }
-            ]
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            11
-          ],
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        ""
-      ]
-    },
-    {
-      "id": 10,
-      "type": "CLIPTextEncode",
-      "pos": [
-        530,
-        410
-      ],
-      "size": [
-        320,
-        50
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 7
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 5,
-          "widget": {
-            "name": "text",
-            "config": [
-              "STRING",
-              {
-                "multiline": true
-              }
-            ]
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            12
-          ],
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        ""
       ]
     }
   ],
@@ -1162,14 +1179,6 @@
       "LATENT"
     ],
     [
-      22,
-      6,
-      0,
-      3,
-      0,
-      "IMAGE"
-    ],
-    [
       23,
       2,
       0,
@@ -1178,84 +1187,76 @@
       "MODEL"
     ],
     [
-      24,
+      35,
       2,
       3,
-      3,
+      11,
       1,
       "CheckpointYesmix_v20.safetensors,Chilloutmix-Ni.safetensors,CounterfeitV30_v30.safetensors,OldFish_2348V12.safetensors,abyssorangemix2_Hard.safetensors,abyssorangemix2_Hard.vae.pt,alstroemeriaMix_v10.safetensors,alstroemeriaMix_v10.vae.ckpt,aoaokoPVCStyleModel_pvcAOAOKO.safetensors,appIcons_v2.ckpt,architecturerealmix_v1repair.safetensors,betterPinkPussy_v01.safetensors,bokomix2_v20.safetensors,cetusMix_Coda2.safetensors,cetusMix_Coda2.vae.pt,cetusMix_Whalefall2.safetensors,cetusMix_Whalefall2.vae.pt,cetusMix_v4.safetensors,cetusMix_v4.vae.pt,cheeseDaddysLandscapes_35FP16.safetensors,chikmix_V3.safetensors,chilloutmix_NiPrunedFp16Fix.safetensors,chilloutmix_NiPrunedFp32Fix.safetensors,cinematicDiffusion_v1.ckpt,dalcefoPainting_2nd.safetensors,dalcefoPainting_3rd.safetensors,dalcefoV3Painting_dalcefoV3Painting.safetensors,dosmix_.safetensors,dreamlikeDiffusion10_10.ckpt,dreamlikePhotoreal20_dreamlikePhotoreal20.safetensors,dvarchMultiPrompt_dvarchExterior.safetensors,dvarchMultiPrompt_dvarchInterior.safetensors,expmixLine_v20.safetensors,facebombmix_v1Bakedvae.safetensors,fantexiV08.safetensors,fantexiV08a.safetensors,fantexiV08c.safetensors,fantexiV09beta.ckpt,fantexiV09beta.vae.ckpt,gdmLuxuryModernHouseAnd_v10.ckpt,ghostmix_v20Bakedvae.safetensors,grapefruitHentaiModel_grapefruitv41.safetensors,guofeng3_v32Light.safetensors,hassakuHentaiModel_v13.safetensors,inkpunkDiffusion_v2.ckpt,izumi_01Safetensors.safetensors,knollingcase_v1.ckpt,landscapesupermix_v21.safetensors,majicmixRealistic_v6.safetensors,majicmixSombre_v20.safetensors,meichidarkMix_meichidarkV4.safetensors,meinahentai_v4.safetensors,meinamix_meinaV11.safetensors,newmarsmix_25D.safetensors,newmarsmix_25D.vae.pt,newmarsmix_N.safetensors,newmarsmix_R11.safetensors,nudify_xl.safetensors,orangehardBasil05_v10.safetensors,perfectWorld_perfectWorldBakedVAE.safetensors,perfectWorld_v2Baked.safetensors,perfectWorld_v3Baked.safetensors,perfectWorld_v4Baked.safetensors,perfectWorld_v5Baked.safetensors,protogenV22Anime_22.safetensors,roboeticinkpunkdream_shaperchromav510.safetensors,sd_xl_base_1.0_0.9vae.safetensors,sd_xl_refiner_1.0_0.9vae.safetensors,stablediffusionv1.5.safetensors,sunshinemix_PrunedFp16.safetensors,sunshinemix_sunlightmixPruned.safetensors,uberRealisticPornMerge_urpmv13.safetensors,v2-1_768-ema-pruned-fp16.safetensors,xeroxrealmix_v35.safetensors,xsarchitecturalV1Aerial_v11.ckpt,xsarchitectural_v11.ckpt,xsarchitecturalv1com_v12.ckpt,xsarchitecturalv3com_v31.safetensors,xxmix9realistic_v40.safetensors,yesmix_v16Original.safetensors"
     ],
     [
-      25,
+      36,
       2,
       4,
+      11,
       3,
-      2,
       "INT"
     ],
     [
-      26,
+      37,
       1,
       5,
-      3,
-      3,
+      11,
+      4,
       "INT"
     ],
     [
-      27,
+      38,
       1,
       6,
-      3,
-      4,
+      11,
+      5,
       "FLOAT"
     ],
     [
-      28,
+      39,
       2,
       7,
-      3,
-      5,
+      11,
+      6,
       "euler,euler_ancestral,heun,dpm_2,dpm_2_ancestral,lms,dpm_fast,dpm_adaptive,dpmpp_2s_ancestral,dpmpp_sde,dpmpp_sde_gpu,dpmpp_2m,dpmpp_2m_sde,dpmpp_2m_sde_gpu,dpmpp_3m_sde,dpmpp_3m_sde_gpu,ddpm,ddim,uni_pc,uni_pc_bh2"
     ],
     [
-      29,
+      40,
       2,
       8,
-      3,
-      6,
+      11,
+      8,
       "normal,karras,exponential,sgm_uniform,simple,ddim_uniform"
     ],
     [
-      30,
+      41,
       1,
       2,
-      3,
-      7,
+      11,
+      10,
       "STRING"
     ],
     [
-      31,
+      42,
       1,
       3,
-      3,
-      8,
+      11,
+      11,
       "STRING"
     ],
     [
-      32,
-      2,
-      9,
-      3,
-      9,
-      "INT"
-    ],
-    [
-      33,
-      2,
-      10,
-      3,
-      10,
-      "INT"
+      44,
+      6,
+      0,
+      11,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
