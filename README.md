@@ -8,8 +8,10 @@
         <img alt="GitHub tag (with filter)" src="https://img.shields.io/github/v/tag/receyuki/stable-diffusion-prompt-reader?label=core"></a>
     <a href="https://github.com/psf/black">
         <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-    <br><br>
-<h3>This project is currently in beta status. If you encounter any issues or have any suggestions, please let me know.</h3>
+    <br>
+<blockquote>
+This project is currently in beta status. If you encounter any issues or have any suggestions, please let me know.
+</blockquote>
 This is a subproject of the 
 <a href="https://github.com/receyuki/stable-diffusion-prompt-reader">SD Prompt Reader.</a>
 It helps you extract metadata from images in any format supported by the 
