@@ -278,7 +278,7 @@ class SDPromptSaver:
 
         model_name_real = model_name_str if model_name_str else model_name
         sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
-        scheduler_real = scheduler if scheduler_str else scheduler
+        scheduler_real = scheduler_str if scheduler_str else scheduler
 
         for image in images:
             i = 255.0 * image.cpu().numpy()
