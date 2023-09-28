@@ -185,7 +185,10 @@ class SDPromptSaver:
             "required": {
                 "images": ("IMAGE",),
                 "filename_prefix": ("STRING", {"default": "ComfyUI"}),
+            },
+            "optional": {
                 "model_name": (folder_paths.get_filename_list("checkpoints"),),
+                "model_name_str": ("STRING", {"default": ""}),
                 "seed": (
                     "INT",
                     {
@@ -209,12 +212,12 @@ class SDPromptSaver:
                     },
                 ),
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
+                "sampler_name_str": ("STRING", {"default": ""}),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+                "scheduler_str": ("STRING", {"default": ""}),
                 "positive": ("STRING", {"default": "", "multiline": True}),
                 "negative": ("STRING", {"default": "", "multiline": True}),
                 "extension": (["png", "jpg", "webp"],),
-            },
-            "optional": {
                 "width": (
                     "INT",
                     {"default": 0, "min": 1, "max": MAX_RESOLUTION, "step": 8},
@@ -242,11 +245,14 @@ class SDPromptSaver:
         images,
         filename_prefix,
         model_name: str = "",
+        model_name_str: str = "",
         seed: int = 0,
         steps: int = 0,
         cfg: float = 0.0,
         sampler_name: str = "",
+        sampler_name_str: str = "",
         scheduler: str = "",
+        scheduler_str: str = "",
         positive: str = "",
         negative: str = "",
         extension: str = "png",
@@ -269,12 +275,17 @@ class SDPromptSaver:
             filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0]
         )
         results = list()
+
+        model_name_real = model_name_str if model_name_str else model_name
+        sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
+        scheduler_real = scheduler if scheduler_str else scheduler
+
         for image in images:
             i = 255.0 * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             metadata = None
             model_hash = (
-                f"Model hash: {self.calculate_model_hash(model_name)}, "
+                f"Model hash: {self.calculate_model_hash(model_name_real)}, "
                 if calculate_model_hash
                 else ""
             )
@@ -282,12 +293,12 @@ class SDPromptSaver:
                 f"{positive}\n"
                 f"Negative prompt: {negative}\n"
                 f"Steps: {steps}, "
-                f"Sampler: {sampler_name}{''if scheduler == 'normal' else '_'+scheduler}, "
+                f"Sampler: {sampler_name_real}{''if scheduler_real == 'normal' else '_'+scheduler_real}, "
                 f"CFG scale: {cfg}, "
                 f"Seed: {seed}, "
                 f"Size: {img.width if width==0 else width}x{img.height if height==0 else height}, "
                 f"{model_hash}"
-                f"Model: {Path(model_name).stem}, "
+                f"Model: {Path(model_name_real).stem}, "
                 f"Version: ComfyUI"
             )
             file = Path(full_output_folder) / f"{filename}_{counter:05}_.{extension}"
@@ -336,32 +347,6 @@ class SDPromptSaver:
                 hash_sha256.update(chunk)
 
         return hash_sha256.hexdigest()[:10]
-
-
-class SDPromptMerger:
-    @classmethod
-    def INPUT_TYPES(s):
-        return {
-            "required": {
-                "text_g": (
-                    "STRING",
-                    {"default": "", "multiline": True, "forceInput": True},
-                ),
-                "text_l": (
-                    "STRING",
-                    {"default": "", "multiline": True, "forceInput": True},
-                ),
-            },
-        }
-
-    RETURN_TYPES = ("STRING",)
-    FUNCTION = "merge_prompt"
-    CATEGORY = "SD Prompt Reader"
-
-    def merge_prompt(self, text_g, text_l):
-        if text_l == "":
-            return text_g
-        return (text_g + "\n" + text_l,)
 
 
 class SDParameterGenerator:
@@ -477,16 +462,81 @@ class SDParameterGenerator:
         )
 
 
+class SDPromptMerger:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "text_g": (
+                    "STRING",
+                    {"default": "", "multiline": True, "forceInput": True},
+                ),
+                "text_l": (
+                    "STRING",
+                    {"default": "", "multiline": True, "forceInput": True},
+                ),
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    FUNCTION = "merge_prompt"
+    CATEGORY = "SD Prompt Reader"
+
+    def merge_prompt(self, text_g, text_l):
+        if text_l == "":
+            return text_g
+        return (text_g + "\n" + text_l,)
+
+
+class SDTypeConverter:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {},
+            "optional": {
+                "model_name": (folder_paths.get_filename_list("checkpoints"),),
+                "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+            },
+        }
+
+    RETURN_TYPES = (
+        "STRING",
+        "STRING",
+        "STRING",
+    )
+
+    RETURN_NAMES = (
+        "MODEL_NAME_STR",
+        "SAMPLER_NAME_STR",
+        "SCHEDULER_STR",
+    )
+
+    FUNCTION = "convert_string"
+    CATEGORY = "SD Prompt Reader"
+
+    def convert_string(
+        self, model_name: str = "", sampler_name: str = "", scheduler: str = ""
+    ):
+        return (
+            model_name,
+            sampler_name,
+            scheduler,
+        )
+
+
 NODE_CLASS_MAPPINGS = {
     "SDPromptReader": SDPromptReader,
     "SDPromptSaver": SDPromptSaver,
-    "SDPromptMerger": SDPromptMerger,
     "SDParameterGenerator": SDParameterGenerator,
+    "SDPromptMerger": SDPromptMerger,
+    "SDTypeConverter": SDTypeConverter,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "SDPromptReader": "SD Prompt Reader",
     "SDPromptSaver": "SD Prompt Saver",
-    "SDPromptMerger": "SD Prompt Merger",
     "SDParameterGenerator": "SD Parameter Generator",
+    "SDPromptMerger": "SD Prompt Merger",
+    "SDTypeConverter": "SD Type Converter",
 }
