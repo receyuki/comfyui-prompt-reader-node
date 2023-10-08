@@ -355,8 +355,10 @@ class SDParameterGenerator:
         return {
             "required": {
                 "ckpt_name": (folder_paths.get_filename_list("checkpoints"),),
-                "with_config": ("BOOLEAN", {"default": False}),
-                "config_name": (folder_paths.get_filename_list("configs"),),
+                "config_name": (
+                    ["disable"] + folder_paths.get_filename_list("configs"),
+                    {"default": "disable"},
+                ),
             },
             "optional": {
                 "seed": (
@@ -421,7 +423,6 @@ class SDParameterGenerator:
     def generate_parameter(
         self,
         ckpt_name,
-        with_config,
         config_name,
         seed,
         steps,
@@ -433,9 +434,9 @@ class SDParameterGenerator:
         output_vae=True,
         output_clip=True,
     ):
-        config_path = folder_paths.get_full_path("configs", config_name)
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
-        if with_config:
+        if config_name != "disable":
+            config_path = folder_paths.get_full_path("configs", config_name)
             checkpoint = comfy.sd.load_checkpoint(
                 config_path,
                 ckpt_path,
