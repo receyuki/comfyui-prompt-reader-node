@@ -44,9 +44,10 @@ additional metadata to ensure compatibility with metadata detection on websites 
 See [SD Prompt Reader](https://github.com/receyuki/stable-diffusion-prompt-reader#supported-formats) for details
 
 ## Installation
-### Install via [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager) (Recommended)
+### Install and update via [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager) (Recommended)
 Search for `SD Prompt Reader` in the ComfyUI Manager and install it.
 ### Install manually
+Please make sure to install the submodules along with the main repository.
 1. `cd` to the `custom_node` folder
 2. Clone this repo
     ```shell
@@ -58,7 +59,7 @@ Search for `SD Prompt Reader` in the ComfyUI Manager and install it.
     pip install -r requirements.txt
     ```
 #### Update
-Please ensure that you update the submodules along with the main repo.
+When updating, don't forget to include the submodules along with the main repository.
 ```shell
 git pull --recurse-submodules
 ```
