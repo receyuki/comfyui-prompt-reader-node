@@ -7,6 +7,8 @@
 
 
 import os
+from datetime import datetime
+
 import torch
 import json
 import numpy as np
@@ -184,9 +186,13 @@ class SDPromptSaver:
         return {
             "required": {
                 "images": ("IMAGE",),
-                "filename_prefix": ("STRING", {"default": "ComfyUI"}),
             },
             "optional": {
+                "filename": (
+                    "STRING",
+                    {"default": "ComfyUI_%time_%seed_%counter", "multiline": False},
+                ),
+                "path": ("STRING", {"default": "%date/", "multiline": False}),
                 "model_name": (folder_paths.get_filename_list("checkpoints"),),
                 "model_name_str": ("STRING", {"default": ""}),
                 "seed": (
@@ -229,6 +235,14 @@ class SDPromptSaver:
                 "calculate_model_hash": ("BOOLEAN", {"default": False}),
                 "lossless_webp": ("BOOLEAN", {"default": True}),
                 "jpg_webp_quality": ("INT", {"default": 100, "min": 1, "max": 100}),
+                "date_format": (
+                    "STRING",
+                    {"default": "%Y-%m-%d", "multiline": False},
+                ),
+                "time_format": (
+                    "STRING",
+                    {"default": "%H%M%S", "multiline": False},
+                ),
             },
             "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
@@ -243,7 +257,8 @@ class SDPromptSaver:
     def save_images(
         self,
         images,
-        filename_prefix,
+        filename: str = "ComfyUI_%time_%seed_%counter",
+        path: str = "%date/",
         model_name: str = "",
         model_name_str: str = "",
         seed: int = 0,
@@ -261,24 +276,40 @@ class SDPromptSaver:
         calculate_model_hash: bool = False,
         lossless_webp: bool = True,
         jpg_webp_quality: int = 100,
+        date_format: str = "%Y-%m-%d",
+        time_format: str = "%H%M%S",
         prompt=None,
         extra_pnginfo=None,
     ):
-        filename_prefix += self.prefix_append
         (
             full_output_folder,
-            filename,
+            filename_alt,
             counter,
-            subfolder,
+            subfolder_alt,
             filename_prefix,
         ) = folder_paths.get_save_image_path(
-            filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0]
+            self.prefix_append, self.output_dir, images[0].shape[1], images[0].shape[0]
         )
+
         results = list()
 
         model_name_real = model_name_str if model_name_str else model_name
         sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
         scheduler_real = scheduler_str if scheduler_str else scheduler
+
+        variable_map = {
+            "%date": self.get_time(date_format),
+            "%time": self.get_time(time_format),
+            "%counter": f"{counter:05}",
+            "%seed": seed,
+            "%steps": steps,
+            "%cfg": cfg,
+            "%extension": extension,
+            "%model": model_name_real,
+            "%sampler": sampler_name_real,
+            "%scheduler": scheduler_real,
+            "%quality": jpg_webp_quality,
+        }
 
         for image in images:
             i = 255.0 * image.cpu().numpy()
@@ -301,7 +332,11 @@ class SDPromptSaver:
                 f"Model: {Path(model_name_real).stem}, "
                 f"Version: ComfyUI"
             )
-            file = Path(full_output_folder) / f"{filename}_{counter:05}_.{extension}"
+            subfolder = self.get_path(path, variable_map)
+            output_folder = Path(full_output_folder) / subfolder
+            output_folder.mkdir(parents=True, exist_ok=True)
+            file = self.get_path(filename, variable_map).with_suffix("." + extension)
+
             if extension == "png":
                 if not args.disable_metadata:
                     metadata = PngInfo()
@@ -312,12 +347,16 @@ class SDPromptSaver:
                         for x in extra_pnginfo:
                             metadata.add_text(x, json.dumps(extra_pnginfo[x]))
                 img.save(
-                    file,
+                    output_folder / file,
                     pnginfo=metadata,
                     compress_level=4,
                 )
             else:
-                img.save(file, quality=jpg_webp_quality, lossless=lossless_webp)
+                img.save(
+                    output_folder / file,
+                    quality=jpg_webp_quality,
+                    lossless=lossless_webp,
+                )
                 if not args.disable_metadata:
                     metadata = piexif.dump(
                         {
@@ -330,7 +369,7 @@ class SDPromptSaver:
                     )
                     piexif.insert(metadata, str(file))
             results.append(
-                {"filename": file.name, "subfolder": subfolder, "type": self.type}
+                {"filename": file.name, "subfolder": str(subfolder), "type": self.type}
             )
             counter += 1
 
@@ -347,6 +386,21 @@ class SDPromptSaver:
                 hash_sha256.update(chunk)
 
         return hash_sha256.hexdigest()[:10]
+
+    @staticmethod
+    def get_path(name, variable_map):
+        for variable, value in variable_map.items():
+            name = name.replace(variable, str(value))
+        return Path(name)
+
+    @staticmethod
+    def get_time(time_format):
+        now = datetime.now()
+        try:
+            time_str = now.strftime(time_format)
+            return time_str
+        except:
+            return ""
 
 
 class SDParameterGenerator:
