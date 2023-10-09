@@ -1,0 +1,47 @@
+name: "Bug Report"
+description: Create a new ticket for a bug.
+title: "[BUG] - title"
+labels: [
+  "bug"
+]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: Please enter an explicit description of your issue.
+      placeholder: Short and explicit description of your incident...
+    validations:
+      required: true
+  - type: textarea
+    id: reprod
+    attributes:
+      label: "Reproduction steps"
+      description: Please enter an explicit description of your issue.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: false
+  - type: textarea
+    id: image
+    attributes:
+      label: "Image file"
+      description: If applicable, add screenshots to help explain your problem.
+      placeholder: |
+        ![DESCRIPTION](LINK.png)
+    validations:
+      required: false
+  - type: dropdown
+    id: version
+    attributes:
+      label: "Version"
+      description: What version are you running?
+      multiple: false
+      options:
+        - 1.0.0
+      default: 0
+    validations:
+      required: false
