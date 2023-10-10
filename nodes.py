@@ -410,8 +410,8 @@ class SDParameterGenerator:
             "required": {
                 "ckpt_name": (folder_paths.get_filename_list("checkpoints"),),
                 "config_name": (
-                    ["disable"] + folder_paths.get_filename_list("configs"),
-                    {"default": "disable"},
+                    ["none"] + folder_paths.get_filename_list("configs"),
+                    {"default": "none"},
                 ),
             },
             "optional": {
@@ -440,6 +440,22 @@ class SDParameterGenerator:
                     "INT",
                     {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
                 ),
+                "batch_size": (
+                    "INT",
+                    {
+                        "default": 1,
+                        "min": 1,
+                        "max": 4096,
+                    },
+                ),
+                "positive_ascore": (
+                    "FLOAT",
+                    {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
+                ),
+                "negative_ascore": (
+                    "FLOAT",
+                    {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
+                ),
             },
         }
 
@@ -455,6 +471,9 @@ class SDParameterGenerator:
         comfy.samplers.KSampler.SCHEDULERS,
         "INT",
         "INT",
+        "INT",
+        "FLOAT",
+        "FLOAT",
     )
 
     RETURN_NAMES = (
@@ -469,6 +488,9 @@ class SDParameterGenerator:
         "SCHEDULER",
         "WIDTH",
         "HEIGHT",
+        "BATCH_SIZE",
+        "POSITIVE_ASCORE",
+        "NEGATIVE_ASCORE",
     )
     FUNCTION = "generate_parameter"
 
@@ -485,11 +507,14 @@ class SDParameterGenerator:
         scheduler,
         width,
         height,
+        batch_size,
+        positive_ascore,
+        negative_ascore,
         output_vae=True,
         output_clip=True,
     ):
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
-        if config_name != "disable":
+        if config_name != "none":
             config_path = folder_paths.get_full_path("configs", config_name)
             checkpoint = comfy.sd.load_checkpoint(
                 config_path,
@@ -514,6 +539,9 @@ class SDParameterGenerator:
             scheduler,
             width,
             height,
+            batch_size,
+            positive_ascore,
+            negative_ascore,
         )
 
 
