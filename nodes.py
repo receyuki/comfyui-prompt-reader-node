@@ -404,6 +404,24 @@ class SDPromptSaver:
 
 
 class SDParameterGenerator:
+    ASPECT_RATIO_MAP = {
+        "1:1": (512, 512),
+        "4:3": (576, 448),
+        "3:4": (448, 576),
+        "3:2": (608, 416),
+        "2:3": (416, 608),
+        "16:9": (672, 384),
+        "9:16": (384, 672),
+        "21:9": (768, 320),
+        "9:21": (320, 768),
+    }
+
+    MODEL_SCALING_FACTOR = {
+        "SDv1 512px": 1.0,
+        "SDv2 768px": 1.5,
+        "SDXL 1024px": 2.0,
+    }
+
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -439,6 +457,14 @@ class SDParameterGenerator:
                 "height": (
                     "INT",
                     {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                ),
+                "aspect_ratio": (
+                    ["custom"] + list(SDParameterGenerator.ASPECT_RATIO_MAP.keys()),
+                    {"default": "custom"},
+                ),
+                "model_version": (
+                    list(SDParameterGenerator.MODEL_SCALING_FACTOR.keys()),
+                    {"default": "SDv1 512px"},
                 ),
                 "batch_size": (
                     "INT",
@@ -507,6 +533,8 @@ class SDParameterGenerator:
         scheduler,
         width,
         height,
+        aspect_ratio,
+        model_version,
         batch_size,
         positive_ascore,
         negative_ascore,
@@ -530,6 +558,17 @@ class SDParameterGenerator:
                 output_clip=True,
                 embedding_directory=folder_paths.get_folder_paths("embeddings"),
             )[:3]
+
+        if aspect_ratio != "custom":
+            width = int(
+                SDParameterGenerator.ASPECT_RATIO_MAP[aspect_ratio][0]
+                * SDParameterGenerator.MODEL_SCALING_FACTOR[model_version]
+            )
+            height = int(
+                SDParameterGenerator.ASPECT_RATIO_MAP[aspect_ratio][1]
+                * SDParameterGenerator.MODEL_SCALING_FACTOR[model_version]
+            )
+
         return checkpoint + (
             ckpt_name,
             seed,
