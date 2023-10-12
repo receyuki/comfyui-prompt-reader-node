@@ -482,6 +482,10 @@ class SDParameterGenerator:
                     "FLOAT",
                     {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
                 ),
+                "refiner_start": (
+                    "FLOAT",
+                    {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.1},
+                ),
             },
         }
 
@@ -498,6 +502,8 @@ class SDParameterGenerator:
         "INT",
         "INT",
         "INT",
+        "FLOAT",
+        "FLOAT",
         "FLOAT",
         "FLOAT",
     )
@@ -517,6 +523,8 @@ class SDParameterGenerator:
         "BATCH_SIZE",
         "POSITIVE_ASCORE",
         "NEGATIVE_ASCORE",
+        "BASE_STEPS",
+        "REFINER_STEPS",
     )
     FUNCTION = "generate_parameter"
 
@@ -538,6 +546,7 @@ class SDParameterGenerator:
         batch_size,
         positive_ascore,
         negative_ascore,
+        refiner_start,
         output_vae=True,
         output_clip=True,
     ):
@@ -569,6 +578,9 @@ class SDParameterGenerator:
                 * SDParameterGenerator.MODEL_SCALING_FACTOR[model_version]
             )
 
+        base_steps = int(steps * refiner_start)
+        refiner_steps = steps - base_steps
+
         return checkpoint + (
             ckpt_name,
             seed,
@@ -581,6 +593,8 @@ class SDParameterGenerator:
             batch_size,
             positive_ascore,
             negative_ascore,
+            base_steps,
+            refiner_steps,
         )
 
 
