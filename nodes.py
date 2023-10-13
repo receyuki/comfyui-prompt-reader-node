@@ -203,7 +203,7 @@ class SDPromptSaver:
                 "seed": (
                     "INT",
                     {
-                        "default": 0,
+                        "default": -1,
                         "min": 0,
                         "max": 0xFFFFFFFFFFFFFFFF,
                     },
@@ -586,21 +586,38 @@ class SDParameterGenerator:
         base_steps = int(steps * refiner_start)
         refiner_steps = steps - base_steps
 
-        return checkpoint + (
-            ckpt_name,
-            seed,
-            steps,
-            cfg,
-            sampler_name,
-            scheduler,
-            width,
-            height,
-            batch_size,
-            positive_ascore,
-            negative_ascore,
-            base_steps,
-            refiner_steps,
-        )
+        return {
+            "ui": {
+                "text": (
+                    aspect_ratio,
+                    model_version,
+                    width,
+                    height,
+                    steps,
+                    refiner_start,
+                    base_steps,
+                    refiner_steps,
+                )
+            },
+            "result": (
+                checkpoint
+                + (
+                    ckpt_name,
+                    seed,
+                    steps,
+                    cfg,
+                    sampler_name,
+                    scheduler,
+                    width,
+                    height,
+                    batch_size,
+                    positive_ascore,
+                    negative_ascore,
+                    base_steps,
+                    refiner_steps,
+                )
+            ),
+        }
 
 
 class SDPromptMerger:
@@ -635,9 +652,15 @@ class SDTypeConverter:
         return {
             "required": {},
             "optional": {
-                "model_name": (folder_paths.get_filename_list("checkpoints"),),
-                "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+                "model_name": (
+                    folder_paths.get_filename_list("checkpoints"),
+                    {"forceInput": True},
+                ),
+                "sampler_name": (
+                    comfy.samplers.KSampler.SAMPLERS,
+                    {"forceInput": True},
+                ),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS, {"forceInput": True}),
             },
         }
 
