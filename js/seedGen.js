@@ -126,7 +126,7 @@ class SeedControl {
             node.widgets_values[index] = "";
             return "";
         };
-        // this.node.computeSize();
+        this.node.computeSize();
     }
     removeLastSeedValue() {
         if (!this.lastSeedValue)
@@ -134,7 +134,7 @@ class SeedControl {
         this.lastSeedValue.inputEl.remove();
         this.node.widgets.splice(this.node.widgets.indexOf(this.lastSeedValue), 1);
         this.lastSeedValue = null;
-        // this.node.computeSize();
+        this.node.computeSize();
     }
 }
 app.registerExtension({
@@ -145,7 +145,6 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function () {
                 onNodeCreated ? onNodeCreated.apply(this, []) : undefined;
                 this.seedControl = new SeedControl(this);
-                // Resize the node
                 const nodeWidth = this.size[0];
                 const nodeHeight = this.size[1];
                 this.setSize([nodeWidth*1.5, nodeHeight * 1.1]);
