@@ -82,6 +82,7 @@ class SDPromptReader:
         "INT",
         "INT",
         "STRING",
+        "STRING",
     )
     RETURN_NAMES = (
         "IMAGE",
@@ -94,6 +95,7 @@ class SDPromptReader:
         "WIDTH",
         "HEIGHT",
         "SETTING",
+        "FILE_NAME",
     )
 
     FUNCTION = "load_image"
@@ -113,11 +115,13 @@ class SDPromptReader:
         else:
             mask = torch.zeros((64, 64), dtype=torch.float32, device="cpu")
 
-        if Path(image_path).suffix not in SUPPORTED_FORMATS:
+        file_path = Path(image_path)
+
+        if file_path.suffix not in SUPPORTED_FORMATS:
             output_to_terminal(MESSAGE["suffix_error"][1])
             raise ValueError(MESSAGE["suffix_error"][1])
 
-        with open(Path(image_path), "rb") as f:
+        with open(file_path, "rb") as f:
             image_data = ImageDataReader(f)
             if not image_data.tool:
                 output_to_terminal(MESSAGE["format_error"][1])
@@ -153,6 +157,7 @@ class SDPromptReader:
                 width,
                 height,
                 image_data.setting,
+                file_path.stem,
             ),
         }
 
