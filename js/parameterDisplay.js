@@ -27,7 +27,7 @@ app.registerExtension({
                 // Resize the node
                 const nodeWidth = this.size[0];
                 const nodeHeight = this.size[1];
-                this.setSize([nodeWidth*2, nodeHeight * 1.2]);
+                this.setSize([nodeWidth * 2, nodeHeight * 1.2]);
                 return result;
 
             };
@@ -39,15 +39,14 @@ app.registerExtension({
                 let ar_message;
                 if (message.text[0] === "custom") {
                     ar_message = "Custom aspect ratio: " + message.text[2] + " x " + message.text[3];
-                }
-                else{
+                } else {
                     ar_message = `Optimal resolution for ${message.text[1]} model
 with aspect ratio ${message.text[0]}: ${message.text[2]} x ${message.text[3]}`;
                 }
 
                 const start_at_float = parseFloat(message.text[5])
-                const base_percentage = Math.round(start_at_float* 100) + "%";
-                const refiner_percentage = Math.round((1-start_at_float)* 100) + "%";
+                const base_percentage = Math.round(start_at_float * 100) + "%";
+                const refiner_percentage = Math.round((1 - start_at_float) * 100) + "%";
                 const step_message = `Total steps: ${message.text[4]}, refiner start at ${base_percentage},
 Base steps: ${message.text[6]} (${base_percentage}), Refiner steps: ${message.text[7]} (${refiner_percentage})`;
 
