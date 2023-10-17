@@ -41,6 +41,8 @@ app.registerExtension({
                 } else {
                     ar_message = `Optimal resolution for ${message.text[1]} model
 with aspect ratio ${message.text[0]}: ${message.text[2]} x ${message.text[3]}`;
+                    this.widgets.find(obj => obj.name === "width").value = message.text[2];
+                    this.widgets.find(obj => obj.name === "height").value = message.text[3];
                 }
 
                 const start_at_float = parseFloat(message.text[5])
