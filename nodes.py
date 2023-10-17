@@ -437,17 +437,25 @@ class SDParameterGenerator:
         return {
             "required": {
                 "ckpt_name": (folder_paths.get_filename_list("checkpoints"),),
+            },
+            "optional": {
+                "model_version": (
+                    list(SDParameterGenerator.MODEL_SCALING_FACTOR.keys()),
+                    {"default": "SDv1 512px"},
+                ),
                 "config_name": (
                     ["none"] + folder_paths.get_filename_list("configs"),
                     {"default": "none"},
                 ),
-            },
-            "optional": {
                 "seed": (
                     "INT",
                     {"default": -1, "min": -3, "max": 0xFFFFFFFFFFFFFFFF},
                 ),
                 "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
+                "refiner_start": (
+                    "FLOAT",
+                    {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.1},
+                ),
                 "cfg": (
                     "FLOAT",
                     {
@@ -460,6 +468,18 @@ class SDParameterGenerator:
                 ),
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+                "positive_ascore": (
+                    "FLOAT",
+                    {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
+                ),
+                "negative_ascore": (
+                    "FLOAT",
+                    {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
+                ),
+                "aspect_ratio": (
+                    ["custom"] + list(SDParameterGenerator.ASPECT_RATIO_MAP.keys()),
+                    {"default": "custom"},
+                ),
                 "width": (
                     "INT",
                     {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
@@ -467,14 +487,6 @@ class SDParameterGenerator:
                 "height": (
                     "INT",
                     {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
-                ),
-                "aspect_ratio": (
-                    ["custom"] + list(SDParameterGenerator.ASPECT_RATIO_MAP.keys()),
-                    {"default": "custom"},
-                ),
-                "model_version": (
-                    list(SDParameterGenerator.MODEL_SCALING_FACTOR.keys()),
-                    {"default": "SDv1 512px"},
                 ),
                 "batch_size": (
                     "INT",
@@ -484,57 +496,47 @@ class SDParameterGenerator:
                         "max": 4096,
                     },
                 ),
-                "positive_ascore": (
-                    "FLOAT",
-                    {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
-                ),
-                "negative_ascore": (
-                    "FLOAT",
-                    {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
-                ),
-                "refiner_start": (
-                    "FLOAT",
-                    {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.1},
-                ),
             },
         }
 
     RETURN_TYPES = (
+        folder_paths.get_filename_list("checkpoints"),
         "MODEL",
         "CLIP",
         "VAE",
-        folder_paths.get_filename_list("checkpoints"),
+        "INT",
+        "INT",
         "INT",
         "INT",
         "FLOAT",
         comfy.samplers.KSampler.SAMPLERS,
         comfy.samplers.KSampler.SCHEDULERS,
+        "FLOAT",
+        "FLOAT",
         "INT",
         "INT",
         "INT",
-        "FLOAT",
-        "FLOAT",
-        "FLOAT",
-        "FLOAT",
+        "STRING",
     )
 
     RETURN_NAMES = (
+        "MODEL_NAME",
         "MODEL",
         "CLIP",
         "VAE",
-        "MODEL_NAME",
         "SEED",
         "STEPS",
+        "BASE_STEPS",
+        "REFINER_STEPS",
         "CFG",
         "SAMPLER_NAME",
         "SCHEDULER",
+        "POSITIVE_ASCORE",
+        "NEGATIVE_ASCORE",
         "WIDTH",
         "HEIGHT",
         "BATCH_SIZE",
-        "POSITIVE_ASCORE",
-        "NEGATIVE_ASCORE",
-        "BASE_STEPS",
-        "REFINER_STEPS",
+        "PARAMETERS",
     )
     FUNCTION = "generate_parameter"
 
@@ -542,21 +544,21 @@ class SDParameterGenerator:
 
     def generate_parameter(
         self,
+        model_version,
         ckpt_name,
         config_name,
         seed,
         steps,
+        refiner_start,
         cfg,
         sampler_name,
         scheduler,
-        width,
-        height,
-        aspect_ratio,
-        model_version,
-        batch_size,
         positive_ascore,
         negative_ascore,
-        refiner_start,
+        aspect_ratio,
+        width,
+        height,
+        batch_size,
         output_vae=True,
         output_clip=True,
     ):
@@ -591,6 +593,17 @@ class SDParameterGenerator:
         base_steps = int(steps * refiner_start)
         refiner_steps = steps - base_steps
 
+        parameters = (
+            f"Model: {ckpt_name},\n"
+            f"Seed: {str(seed)},\n"
+            f"Steps: {str(steps)},\n"
+            f"CFG scale: {str(cfg)},\n"
+            f"Sampler: {sampler_name},\n"
+            f"Scheduler: {scheduler},\n"
+            f"Size: {str(width)}x{str(height)},\n"
+            f"Batch size: {str(batch_size)},\n"
+        )
+
         return {
             "ui": {
                 "text": (
@@ -605,21 +618,22 @@ class SDParameterGenerator:
                 )
             },
             "result": (
-                checkpoint
+                (ckpt_name,)
+                + checkpoint
                 + (
-                    ckpt_name,
                     seed,
                     steps,
+                    base_steps,
+                    refiner_steps,
                     cfg,
                     sampler_name,
                     scheduler,
+                    positive_ascore,
+                    negative_ascore,
                     width,
                     height,
                     batch_size,
-                    positive_ascore,
-                    negative_ascore,
-                    base_steps,
-                    refiner_steps,
+                    parameters,
                 )
             ),
         }
