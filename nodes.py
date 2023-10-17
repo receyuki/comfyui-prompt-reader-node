@@ -454,7 +454,7 @@ class SDParameterGenerator:
                 "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                 "refiner_start": (
                     "FLOAT",
-                    {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.1},
+                    {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.01},
                 ),
                 "cfg": (
                     "FLOAT",
