@@ -27,7 +27,7 @@ jobs:
       run: |
         tag_name="${{ env.TAG_NAME }}"
         mkdir "$tag_name"
-        cp -r . "$tag_name"
+        cp -r * "$tag_name"
         zip -r "$tag_name.zip" "$tag_name"
 
     - name: Upload ZIP Archive
