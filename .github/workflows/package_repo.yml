@@ -27,7 +27,7 @@ jobs:
       run: |
         tag_name="${{ env.TAG_NAME }}"
         mkdir temp_directory
-        cp -r * temp_directory
+        rsync -av --exclude='.github' * temp_directory
         zip -r "$tag_name.zip" temp_directory
 
     - name: Upload ZIP Archive
