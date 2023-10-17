@@ -125,4 +125,4 @@ have higher priority, so do not connect `STRING` inputs unless necessary, as the
 - The SD Prompt Reader node is based on [ComfyUI Load Image With Metadata](https://github.com/tkoenig89/ComfyUI_Load_Image_With_Metadata)
 - The SD Prompt Saver node is based on [Comfy Image Saver](https://github.com/giriss/comfy-image-saver) & [Stable Diffusion Webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 - The seed generator in the SD Parameter Generator is modified from [rgthree's Comfy Nodes](https://github.com/rgthree/rgthree-comfy#rgthrees-comfy-nodes)
-- A special thanks to [@alessandroperilli](https://github.com/alessandroperilli) for providing numerous suggestions
+- A special thanks to [@alessandroperilli](https://github.com/alessandroperilli) and his [AP Workflow](AP Workflow) for providing numerous suggestions
