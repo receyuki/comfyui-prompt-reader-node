@@ -65,6 +65,7 @@ git pull --recurse-submodules
 ```
 
 ## Usage
+>The following section may be outdated and could differ from the actual nodes.
 ### Prompt Reader Node
 - The Prompt Reader Node works exactly the same as the 
 [standalone SD Prompt Reader](https://github.com/receyuki/stable-diffusion-prompt-reader). 
@@ -113,6 +114,8 @@ have higher priority, so do not connect `STRING` inputs unless necessary, as the
 </div>
 
 ### [Example Workflow](./workflows/example_workflow.json)
+>The example workflow is outdated and will be updated in the stable release.
+
 <div align="center">
    <img src="./images/example_workflow.png" width="100%" height="100%" alt="example workflow">
 </div>
