@@ -1,0 +1,31 @@
+name: Package Repository with Submodules
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Update Submodules
+      run: git submodule update --init --recursive
+
+    - name: Create ZIP Archive
+      run: |
+        mkdir repo_with_submodules
+        cp -r * repo_with_submodules
+        zip -r repo_with_submodules.zip repo_with_submodules
+
+    - name: Upload ZIP Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: repo_with_submodules
+        path: ${{ steps.get_tag.outputs.tag }}.zip
