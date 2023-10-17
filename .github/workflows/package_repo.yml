@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: true
 
@@ -21,11 +21,11 @@ jobs:
 
     - name: Get Tag Name
       id: get_tag
-      run: echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
+      run: echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
     - name: Create ZIP Archive
       run: |
-        tag_name="${{ steps.get_tag.outputs.tag }}"
+        tag_name="${{ env.TAG_NAME }}"
         mkdir "$tag_name"
         cp -r . "$tag_name"
         zip -r "$tag_name.zip" "$tag_name"
