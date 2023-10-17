@@ -47,9 +47,15 @@ with aspect ratio ${message.text[0]}: ${message.text[2]} x ${message.text[3]}`;
 
                 const start_at_float = parseFloat(message.text[5])
                 const base_percentage = Math.round(start_at_float * 100) + "%";
-                const refiner_percentage = Math.round((1 - start_at_float) * 100) + "%";
-                const step_message = `Total steps: ${message.text[4]}, refiner start at ${base_percentage},
-Base steps: ${message.text[6]} (${base_percentage}), Refiner steps: ${message.text[7]} (${refiner_percentage})`;
+                // const refiner_percentage = Math.round((1 - start_at_float) * 100) + "%";
+                let step_message;
+                if (start_at_float === 1) {
+                    step_message = `Total steps: ${message.text[4]},
+Refiner off`;
+                } else {
+                    step_message = `Total steps: ${message.text[4]},
+Refiner start at step: ${message.text[6]} (${base_percentage})`;
+                }
 
                 this.widgets.find(obj => obj.name === "steps_display").value = step_message;
                 this.widgets.find(obj => obj.name === "aspect_ratio_display").value = ar_message;

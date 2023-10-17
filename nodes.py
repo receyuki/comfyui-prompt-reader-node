@@ -509,7 +509,6 @@ class SDParameterGenerator:
         "INT",
         "INT",
         "INT",
-        "INT",
         "FLOAT",
         comfy.samplers.KSampler.SAMPLERS,
         comfy.samplers.KSampler.SCHEDULERS,
@@ -528,8 +527,7 @@ class SDParameterGenerator:
         "VAE",
         "SEED",
         "STEPS",
-        "BASE_STEPS",
-        "REFINER_STEPS",
+        "REFINER_START_STEP",
         "CFG",
         "SAMPLER_NAME",
         "SCHEDULER",
@@ -603,7 +601,7 @@ class SDParameterGenerator:
             f"Sampler: {sampler_name},\n"
             f"Scheduler: {scheduler},\n"
             f"Size: {str(width)}x{str(height)},\n"
-            f"Batch size: {str(batch_size)},\n"
+            f"Batch size: {str(batch_size)}\n"
         )
 
         return {
@@ -626,7 +624,6 @@ class SDParameterGenerator:
                     seed,
                     steps,
                     base_steps,
-                    refiner_steps,
                     cfg,
                     sampler_name,
                     scheduler,
