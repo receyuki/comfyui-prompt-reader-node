@@ -64,7 +64,7 @@ class SDPromptReader:
         return {
             "required": {
                 "image": (sorted(files), {"image_upload": True}),
-                "data_index": (
+                "parameter_index": (
                     "INT",
                     {"default": 0, "min": 0, "max": 255, "step": 1},
                 ),
@@ -94,7 +94,7 @@ class SDPromptReader:
         "CFG",
         "WIDTH",
         "HEIGHT",
-        "SETTING",
+        "SETTINGS",
         "FILE_NAME",
     )
 
@@ -102,7 +102,7 @@ class SDPromptReader:
     CATEGORY = "SD Prompt Reader"
     OUTPUT_NODE = True
 
-    def load_image(self, image, data_index):
+    def load_image(self, image, parameter_index):
         image_path = folder_paths.get_annotated_filepath(image)
         i = Image.open(image_path)
         i = ImageOps.exif_transpose(i)
@@ -128,13 +128,15 @@ class SDPromptReader:
                 raise ValueError(MESSAGE["format_error"][1])
 
             seed = int(
-                self.param_parser(image_data.parameter.get("seed"), data_index) or 0
+                self.param_parser(image_data.parameter.get("seed"), parameter_index)
+                or 0
             )
             steps = int(
-                self.param_parser(image_data.parameter.get("steps"), data_index) or 0
+                self.param_parser(image_data.parameter.get("steps"), parameter_index)
+                or 0
             )
             cfg = float(
-                self.param_parser(image_data.parameter.get("cfg"), data_index) or 0
+                self.param_parser(image_data.parameter.get("cfg"), parameter_index) or 0
             )
             width = int(image_data.width or 0)
             height = int(image_data.height or 0)
