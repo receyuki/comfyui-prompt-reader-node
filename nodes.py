@@ -203,7 +203,7 @@ class SDPromptSaver:
                 "seed": (
                     "INT",
                     {
-                        "default": -1,
+                        "default": 0,
                         "min": 0,
                         "max": 0xFFFFFFFFFFFFFFFF,
                     },
@@ -440,7 +440,7 @@ class SDParameterGenerator:
             "optional": {
                 "seed": (
                     "INT",
-                    {"default": 0, "min": 0, "max": 0xFFFFFFFFFFFFFFFF},
+                    {"default": -1, "min": -3, "max": 0xFFFFFFFFFFFFFFFF},
                 ),
                 "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                 "cfg": (
