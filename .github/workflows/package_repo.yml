@@ -1,9 +1,9 @@
 name: Package Repository with Submodules
 
 on:
-  release:
-    types:
-      - published
+  push:
+    tags:        
+      - '*'
   workflow_dispatch:
 
 jobs:
