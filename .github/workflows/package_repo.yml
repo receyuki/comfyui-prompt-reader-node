@@ -26,12 +26,12 @@ jobs:
     - name: Create ZIP Archive
       run: |
         tag_name="${{ env.TAG_NAME }}"
-        mkdir "$tag_name"
-        cp -r * "$tag_name"
-        zip -r "$tag_name.zip" "$tag_name"
+        mkdir temp_directory
+        cp -r * temp_directory
+        zip -r "$tag_name.zip" temp_directory
 
     - name: Upload ZIP Archive
       uses: actions/upload-artifact@v2
       with:
         name: repo_with_submodules
-        path: ${{ steps.get_tag.outputs.tag }}.zip
+        path: ${{ env.TAG_NAME }}.zip
