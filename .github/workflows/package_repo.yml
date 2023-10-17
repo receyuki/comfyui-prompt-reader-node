@@ -26,12 +26,11 @@ jobs:
     - name: Create ZIP Archive
       run: |
         tag_name="${{ env.TAG_NAME }}"
-        mkdir temp_directory
-        rsync -av --exclude='.github' * temp_directory
-        zip -r "$tag_name.zip" temp_directory
+        mkdir "comfyui-prompt-reader-node"
+        rsync -av --exclude='.github' --exclude="comfyui-prompt-reader-node" * comfyui-prompt-reader-node
+        zip -r "${tag_name}.zip" "comfyui-prompt-reader-node"
 
-    - name: Upload ZIP Archive
-      uses: actions/upload-artifact@v2
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
       with:
-        name: repo_with_submodules
-        path: ${{ env.TAG_NAME }}.zip
+        files: ${{ env.TAG_NAME }}.zip
