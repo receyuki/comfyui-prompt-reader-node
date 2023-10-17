@@ -65,7 +65,7 @@ class SeedControl {
                 if (typeof this.lastSeed === "number" && !SPECIAL_SEEDS.includes(this.lastSeed)) {
                     if (inputSeed === SPECIAL_SEED_INCREMENT) {
                         this.serializedCtx.seedUsed = this.lastSeed + 1;
-                    } else if (inputSeed === SPECIAL_SEED_INCREMENT) {
+                    } else if (inputSeed === SPECIAL_SEED_DECREMENT) {
                         this.serializedCtx.seedUsed = this.lastSeed - 1;
                     }
                 }
@@ -142,11 +142,12 @@ app.registerExtension({
         if (nodeData.name === "SDParameterGenerator") {
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function () {
-                onNodeCreated ? onNodeCreated.apply(this, []) : undefined;
+                const result = onNodeCreated?.apply(this, []);
                 this.seedControl = new SeedControl(this);
                 const nodeWidth = this.size[0];
                 const nodeHeight = this.size[1];
                 this.setSize([nodeWidth * 1.5, nodeHeight * 1.1]);
+                return result;
             };
         }
     },
