@@ -23,21 +23,21 @@ jobs:
       id: get_tag
       run: echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
-    - name: Extract Section
-      id: extract_section
-      run: sed -n '/## Installation/,/## Usage/ {/## Usage/!p;}' README.md > installation.md
-    
     - name: Create ZIP Archive
       run: |
         tag_name="${{ env.TAG_NAME }}"
         mkdir "comfyui-prompt-reader-node"
-        rsync -av --exclude='.github' \ 
-                  --exclude="comfyui-prompt-reader-node" \
+        rsync -av --exclude='.github' \
+                  --exclude="comfyui-prompt-reader-node/" \
                   --exclude="stable_diffusion_prompt_reader/images/" \
                   --exclude="stable_diffusion_prompt_reader/whl/" \
                   * comfyui-prompt-reader-node
         zip -r "${tag_name}.zip" "comfyui-prompt-reader-node"
 
+    - name: Extract Section
+      id: extract_section
+      run: sed -n '/## Installation/,/## Usage/ {/## Usage/!p;}' README.md > installation.md
+    
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
