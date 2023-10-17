@@ -248,6 +248,7 @@ class SDPromptSaver:
                     "STRING",
                     {"default": "%H%M%S", "multiline": False},
                 ),
+                "extra_info": ("STRING", {"default": "", "multiline": True}),
             },
             "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
@@ -283,6 +284,7 @@ class SDPromptSaver:
         jpg_webp_quality: int = 100,
         date_format: str = "%Y-%m-%d",
         time_format: str = "%H%M%S",
+        extra_info: str = "",
         prompt=None,
         extra_pnginfo=None,
     ):
@@ -301,6 +303,8 @@ class SDPromptSaver:
         model_name_real = model_name_str if model_name_str else model_name
         sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
         scheduler_real = scheduler_str if scheduler_str else scheduler
+
+        extra_info_real = f", Extra info: {extra_info}" if extra_info else ""
 
         variable_map = {
             "%date": self.get_time(date_format),
@@ -336,6 +340,7 @@ class SDPromptSaver:
                 f"{model_hash}"
                 f"Model: {Path(model_name_real).stem}, "
                 f"Version: ComfyUI"
+                f"{extra_info_real}"
             )
             subfolder = self.get_path(path, variable_map)
             output_folder = Path(full_output_folder) / subfolder
