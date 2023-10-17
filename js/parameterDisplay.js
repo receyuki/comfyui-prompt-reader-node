@@ -1,17 +1,15 @@
 import {app} from "/scripts/app.js";
 import {ComfyWidgets} from "/scripts/widgets.js";
 
-// Create a read-only string widget with opacity set
+// Create a read-only string widget
 function createWidget(app, node, widgetName, type) {
     const widget = ComfyWidgets[type](node, widgetName, ["STRING", {multiline: true}], app).widget;
     widget.inputEl.readOnly = true;
     widget.inputEl.style.textAlign = "center";
     widget.inputEl.style.fontSize = "0.75rem";
-
     return widget;
 }
 
-// Displays prompt and setting on the node
 app.registerExtension({
     name: "sd_prompt_reader.parameterDisplay",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
@@ -21,9 +19,10 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function () {
                 const result = onNodeCreated?.apply(this, arguments);
 
-                // Create prompt and setting widgets
-                const aspect_ratio_display = createWidget(app, this, "aspect_ratio_display", "STRING");
+                // Create widgets
                 const steps_display = createWidget(app, this, "steps_display", "STRING");
+                const aspect_ratio_display = createWidget(app, this, "aspect_ratio_display", "STRING");
+
                 // Resize the node
                 const nodeWidth = this.size[0];
                 const nodeHeight = this.size[1];
@@ -50,8 +49,8 @@ with aspect ratio ${message.text[0]}: ${message.text[2]} x ${message.text[3]}`;
                 const step_message = `Total steps: ${message.text[4]}, refiner start at ${base_percentage},
 Base steps: ${message.text[6]} (${base_percentage}), Refiner steps: ${message.text[7]} (${refiner_percentage})`;
 
-                this.widgets.find(obj => obj.name === "aspect_ratio_display").value = ar_message;
                 this.widgets.find(obj => obj.name === "steps_display").value = step_message;
+                this.widgets.find(obj => obj.name === "aspect_ratio_display").value = ar_message;
             };
         }
     },
