@@ -201,7 +201,7 @@ class SDPromptSaver:
                 ),
                 "path": ("STRING", {"default": "%date/", "multiline": False}),
                 "model_name": (folder_paths.get_filename_list("checkpoints"),),
-                "model_name_str": ("STRING", {"default": ""}),
+                # "model_name_str": ("STRING", {"default": ""}),
                 "seed": (
                     "INT",
                     {
@@ -225,9 +225,9 @@ class SDPromptSaver:
                     },
                 ),
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                "sampler_name_str": ("STRING", {"default": ""}),
+                # "sampler_name_str": ("STRING", {"default": ""}),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
-                "scheduler_str": ("STRING", {"default": ""}),
+                # "scheduler_str": ("STRING", {"default": ""}),
                 "width": (
                     "INT",
                     {"default": 1, "min": 1, "max": MAX_RESOLUTION, "step": 8},
@@ -301,6 +301,8 @@ class SDPromptSaver:
         )
 
         results = list()
+
+        # model_name_str, sampler_name_str, scheduler_str = None, None, None
 
         model_name_real = model_name_str if model_name_str else model_name
         sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
