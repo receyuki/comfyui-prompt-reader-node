@@ -169,14 +169,14 @@ class SDPromptReader:
         return data_list[0] if len(data_list) == 1 else data_list[index]
 
     @classmethod
-    def IS_CHANGED(s, image, data_index):
+    def IS_CHANGED(s, image, parameter_index):
         image_path = folder_paths.get_annotated_filepath(image)
         with open(Path(image_path), "rb") as f:
             image_data = ImageDataReader(f)
         return image_data.props
 
     @classmethod
-    def VALIDATE_INPUTS(s, image, data_index):
+    def VALIDATE_INPUTS(s, image, parameter_index):
         if not folder_paths.exists_annotated_filepath(image):
             return "Invalid image file: {}".format(image)
         return True
