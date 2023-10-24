@@ -9,9 +9,7 @@
     <a href="https://github.com/psf/black">
         <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
     <br>
-<blockquote>
-This project is currently in beta status. If you encounter any issues or have any suggestions, please let me know.
-</blockquote>
+
 This is a subproject of the 
 <a href="https://github.com/receyuki/stable-diffusion-prompt-reader">SD Prompt Reader.</a>
 It helps you extract metadata from images in any format supported by the 
@@ -147,7 +145,6 @@ You can use the `Type Converter` Node to convert them into `STRING` type.
 </div>
 
 ### [Example Workflow](./workflows/example_workflow.json)
->The example workflow is outdated and will be updated in the stable release.
 
 <div align="center">
    <img src="./images/example_workflow.png" width="100%" height="100%" alt="example workflow">
