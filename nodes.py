@@ -94,8 +94,8 @@ class SDPromptReader:
         "CFG",
         "WIDTH",
         "HEIGHT",
-        "SETTINGS",
         "FILE_NAME",
+        "SETTINGS",
     )
 
     FUNCTION = "load_image"
@@ -158,8 +158,8 @@ class SDPromptReader:
                 cfg,
                 width,
                 height,
-                image_data.setting,
                 file_path.stem,
+                image_data.setting,
             ),
         }
 
