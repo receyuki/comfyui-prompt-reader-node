@@ -297,34 +297,36 @@ class SDPromptSaver:
             subfolder_alt,
             filename_prefix,
         ) = folder_paths.get_save_image_path(
-            self.prefix_append, self.output_dir, images[0].shape[1], images[0].shape[0]
+            self.prefix_append,
+            self.output_dir,
+            images[0].shape[1],
+            images[0].shape[0],
         )
 
         results = list()
-
-        # model_name_str, sampler_name_str, scheduler_str = None, None, None
-
-        model_name_real = model_name_str if model_name_str else model_name
-        sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
-        scheduler_real = scheduler_str if scheduler_str else scheduler
-
-        extra_info_real = f", Extra info: {extra_info}" if extra_info else ""
-
-        variable_map = {
-            "%date": self.get_time(date_format),
-            "%time": self.get_time(time_format),
-            "%counter": f"{counter:05}",
-            "%seed": seed,
-            "%steps": steps,
-            "%cfg": cfg,
-            "%extension": extension,
-            "%model": model_name_real,
-            "%sampler": sampler_name_real,
-            "%scheduler": scheduler_real,
-            "%quality": jpg_webp_quality,
-        }
-
         for image in images:
+            # model_name_str, sampler_name_str, scheduler_str = None, None, None
+
+            model_name_real = model_name_str if model_name_str else model_name
+            sampler_name_real = sampler_name_str if sampler_name_str else sampler_name
+            scheduler_real = scheduler_str if scheduler_str else scheduler
+
+            extra_info_real = f", Extra info: {extra_info}" if extra_info else ""
+
+            variable_map = {
+                "%date": self.get_time(date_format),
+                "%time": self.get_time(time_format),
+                "%counter": f"{counter:05}",
+                "%seed": seed,
+                "%steps": steps,
+                "%cfg": cfg,
+                "%extension": extension,
+                "%model": model_name_real,
+                "%sampler": sampler_name_real,
+                "%scheduler": scheduler_real,
+                "%quality": jpg_webp_quality,
+            }
+
             i = 255.0 * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             metadata = None
