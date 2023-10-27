@@ -121,6 +121,7 @@ the `Prompt Saver` Node and `KSampler`.
 - Since it's not possible to directly extract metadata from `KSampler`, it is necessary to 
 use the `Parameter Generator` Node to generate parameters and simultaneously output them to both 
 the `Prompt Saver` Node and `KSampler`.
+- The `Parameter Generator` Node can also be used as a control panel for complex ComfyUI workflows, just like the [AP workflow](https://perilli.com/ai/comfyui/).
 - The `model_version` and `aspect_ratio` are used only for calculating the optimal resolution of the selected model version 
 under the chosen aspect ratio. The calculation method is based on the 
 [Stability AI development documentation](https://platform.stability.ai/docs/features/api-parameters#about-dimensions) 
