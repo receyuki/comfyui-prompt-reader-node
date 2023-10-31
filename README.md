@@ -109,7 +109,10 @@ the `Prompt Saver` Node and `KSampler`.
    | %sampler    |
    | %scheduler  |
    | %quality    |
-
+- `%counter` cannot be used for the `path`. This `%counter` is slightly different from the `%counter` 
+in the built-in Saver node, it will count all image files in the `path`.
+- When the filename already exists, an index will be added at the end of the filename, 
+e.g. `file.png, file_1.png, file_2.png`.
 - For the `date_format` and `time_format`, please refer to 
 [strftime.org](https://strftime.org/) or [www.strfti.me](https://www.strfti.me/).
 
