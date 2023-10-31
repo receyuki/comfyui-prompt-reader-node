@@ -383,7 +383,7 @@ class SDPromptSaver:
                             },
                         }
                     )
-                    piexif.insert(metadata, str(file))
+                    piexif.insert(metadata, str(output_folder / file))
             results.append(
                 {"filename": file.name, "subfolder": str(subfolder), "type": self.type}
             )
