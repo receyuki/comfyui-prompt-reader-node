@@ -8,6 +8,7 @@
 
 import os
 from datetime import datetime
+from itertools import chain
 
 import torch
 import json
@@ -293,7 +294,7 @@ class SDPromptSaver:
         (
             full_output_folder,
             filename_alt,
-            counter,
+            counter_alt,
             subfolder_alt,
             filename_prefix,
         ) = folder_paths.get_save_image_path(
@@ -316,7 +317,6 @@ class SDPromptSaver:
             variable_map = {
                 "%date": self.get_time(date_format),
                 "%time": self.get_time(time_format),
-                "%counter": f"{counter:05}",
                 "%seed": seed,
                 "%steps": steps,
                 "%cfg": cfg,
@@ -326,6 +326,12 @@ class SDPromptSaver:
                 "%scheduler": scheduler_real,
                 "%quality": jpg_webp_quality,
             }
+
+            subfolder = self.get_path(path, variable_map)
+            output_folder = Path(full_output_folder) / subfolder
+            output_folder.mkdir(parents=True, exist_ok=True)
+            counter = self.get_counter(output_folder)
+            variable_map["%counter"] = f"{counter:05}"
 
             i = 255.0 * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
@@ -348,10 +354,9 @@ class SDPromptSaver:
                 f"Version: ComfyUI"
                 f"{extra_info_real}"
             )
-            subfolder = self.get_path(path, variable_map)
-            output_folder = Path(full_output_folder) / subfolder
-            output_folder.mkdir(parents=True, exist_ok=True)
-            file = self.get_path(filename, variable_map).with_suffix("." + extension)
+
+            stem = self.get_path(filename, variable_map)
+            file = self.get_unique_filename(stem, extension, output_folder)
 
             if extension == "png":
                 if not args.disable_metadata:
@@ -387,7 +392,6 @@ class SDPromptSaver:
             results.append(
                 {"filename": file.name, "subfolder": str(subfolder), "type": self.type}
             )
-            counter += 1
 
         return {"ui": {"images": results}}
 
@@ -404,6 +408,13 @@ class SDPromptSaver:
         return hash_sha256.hexdigest()[:10]
 
     @staticmethod
+    def get_counter(directory: Path):
+        img_files = list(
+            chain(*(directory.rglob(f"*{suffix}") for suffix in SUPPORTED_FORMATS))
+        )
+        return len(img_files) + 1
+
+    @staticmethod
     def get_path(name, variable_map):
         for variable, value in variable_map.items():
             name = name.replace(variable, str(value))
@@ -417,6 +428,18 @@ class SDPromptSaver:
             return time_str
         except:
             return ""
+
+    @staticmethod
+    def get_unique_filename(stem: Path, extension: str, output_folder: Path):
+        file = stem.with_suffix(f".{extension}")
+        index = 0
+
+        while (output_folder / file).exists():
+            index += 1
+            new_stem = f"{stem}_{index}"
+            file = Path(new_stem).with_suffix(f".{extension}")
+
+        return file
 
 
 class SDParameterGenerator:
