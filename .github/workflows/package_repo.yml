@@ -36,7 +36,10 @@ jobs:
 
     - name: Extract Section
       id: extract_section
-      run: sed -n '/## Installation/,/## Usage/ {/## Usage/!p;}' README.md > installation.md
+      run: |
+        tag_name="${{ env.TAG_NAME }}"
+        sed -n "/## $tag_name/,/## /p" CHANGELOG.md | sed '$d' >> installation.md
+        sed -n '/## Installation/,/## Usage/ {/## Usage/!p;}' README.md >> installation.md
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
