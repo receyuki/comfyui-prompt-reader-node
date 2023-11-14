@@ -148,7 +148,7 @@ You can use the `Type Converter` Node to convert them into `STRING` type.
    <img src="./images/merger_converter.png" width="25%" height="25%" alt="merger and converter node">
 </div>
 
-### [Example Workflow](./workflows/example_workflow.json)
+### [Example Workflow](https://raw.githubusercontent.com/receyuki/comfyui-prompt-reader-node/main/workflows/example_workflow.json)
 
 <div align="center">
    <img src="./images/example_workflow.png" width="100%" height="100%" alt="example workflow">
