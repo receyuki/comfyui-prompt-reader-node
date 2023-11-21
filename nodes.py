@@ -461,6 +461,21 @@ class SDParameterGenerator:
         "SDXL 1024px": 2.0,
     }
 
+    DEFAULT_ASPECT_RATIO_DISPLAY = list(
+        map(
+            lambda x, scaling_factor=MODEL_SCALING_FACTOR: (
+                f"{x[0]} - "
+                f"{int(x[1][0]*scaling_factor['SDv1 512px'])}x"
+                f"{int(x[1][1]*scaling_factor['SDv1 512px'])} | "
+                f"{int(x[1][0]*scaling_factor['SDv2 768px'])}x"
+                f"{int(x[1][1]*scaling_factor['SDv2 768px'])} | "
+                f"{int(x[1][0]*scaling_factor['SDXL 1024px'])}x"
+                f"{int(x[1][1]*scaling_factor['SDXL 1024px'])}"
+            ),
+            ASPECT_RATIO_MAP.items(),
+        )
+    )
+
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -506,7 +521,7 @@ class SDParameterGenerator:
                     {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01},
                 ),
                 "aspect_ratio": (
-                    ["custom"] + list(SDParameterGenerator.ASPECT_RATIO_MAP.keys()),
+                    ["custom"] + SDParameterGenerator.DEFAULT_ASPECT_RATIO_DISPLAY,
                     {"default": "custom"},
                 ),
                 "width": (
@@ -608,12 +623,13 @@ class SDParameterGenerator:
             )[:3]
 
         if aspect_ratio != "custom":
+            aspect_ratio_value = aspect_ratio.split(" - ")[0]
             width = int(
-                SDParameterGenerator.ASPECT_RATIO_MAP[aspect_ratio][0]
+                SDParameterGenerator.ASPECT_RATIO_MAP[aspect_ratio_value][0]
                 * SDParameterGenerator.MODEL_SCALING_FACTOR[model_version]
             )
             height = int(
-                SDParameterGenerator.ASPECT_RATIO_MAP[aspect_ratio][1]
+                SDParameterGenerator.ASPECT_RATIO_MAP[aspect_ratio_value][1]
                 * SDParameterGenerator.MODEL_SCALING_FACTOR[model_version]
             )
 
@@ -643,7 +659,7 @@ class SDParameterGenerator:
         return {
             "ui": {
                 "text": (
-                    aspect_ratio,
+                    aspect_ratio.split(" - ")[0],
                     model_version,
                     width,
                     height,
@@ -651,6 +667,8 @@ class SDParameterGenerator:
                     refiner_start,
                     base_steps,
                     refiner_steps,
+                    SDParameterGenerator.ASPECT_RATIO_MAP,
+                    SDParameterGenerator.MODEL_SCALING_FACTOR,
                 )
             },
             "result": (

@@ -59,6 +59,17 @@ Refiner start at step: ${message.text[6]} (${base_percentage})`;
 
                 this.widgets.find(obj => obj.name === "steps_display").value = step_message;
                 this.widgets.find(obj => obj.name === "aspect_ratio_display").value = ar_message;
+
+                const scalingFactor = message.text[9][message.text[1]]
+                const aspectRatioArray = Object.entries(message.text[8]).map(([ratio, dimensions]) => {
+                    const [width, height] = dimensions;
+                    return `${ratio} - ${width*scalingFactor}x${height*scalingFactor}`;
+                });
+                aspectRatioArray.unshift("custom")
+
+                const aspectRatio = `${message.text[0]} - ${message.text[8][message.text[0]][0]*scalingFactor}x${message.text[8][message.text[0]][1]*scalingFactor}`
+                this.widgets.find(obj => obj.name === "aspect_ratio").options.values = aspectRatioArray
+                this.widgets.find(obj => obj.name === "aspect_ratio").value = aspectRatio
             };
         }
     },
