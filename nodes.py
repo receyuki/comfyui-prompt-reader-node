@@ -620,6 +620,14 @@ class SDParameterGenerator:
         base_steps = int(steps * refiner_start)
         refiner_steps = steps - base_steps
 
+        if model_version == "SDXL 1024px":
+            ascore = (
+                f"Positive aesthetic score: {positive_ascore},\n"
+                f"Negative aesthetic score: {negative_ascore},\n"
+            )
+        else:
+            ascore = ""
+
         parameters = (
             f"Model: {ckpt_name},\n"
             f"Seed: {str(seed)},\n"
@@ -627,6 +635,7 @@ class SDParameterGenerator:
             f"CFG scale: {str(cfg)},\n"
             f"Sampler: {sampler_name},\n"
             f"Scheduler: {scheduler},\n"
+            f"{ascore}"
             f"Size: {str(width)}x{str(height)},\n"
             f"Batch size: {str(batch_size)}\n"
         )
