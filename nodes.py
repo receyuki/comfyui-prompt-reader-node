@@ -483,6 +483,10 @@ class SDParameterGenerator:
                 "ckpt_name": (folder_paths.get_filename_list("checkpoints"),),
             },
             "optional": {
+                "vae_name": (
+                    ["baked VAE"] + folder_paths.get_filename_list("vae"),
+                    {"default": "baked VAE"},
+                ),
                 "model_version": (
                     list(SDParameterGenerator.MODEL_SCALING_FACTOR.keys()),
                     {"default": "SDv1 512px"},
@@ -586,8 +590,9 @@ class SDParameterGenerator:
 
     def generate_parameter(
         self,
-        model_version,
         ckpt_name,
+        vae_name,
+        model_version,
         config_name,
         seed,
         steps,
@@ -621,6 +626,12 @@ class SDParameterGenerator:
                 output_clip=True,
                 embedding_directory=folder_paths.get_folder_paths("embeddings"),
             )[:3]
+
+        if vae_name != "baked VAE":
+            vae_path = folder_paths.get_full_path("vae", vae_name)
+            sd = comfy.utils.load_torch_file(vae_path)
+            vae = comfy.sd.VAE(sd=sd)
+            checkpoint = (*checkpoint[:2], vae)
 
         if aspect_ratio != "custom":
             aspect_ratio_value = aspect_ratio.split(" - ")[0]
