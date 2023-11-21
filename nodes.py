@@ -95,7 +95,7 @@ class SDPromptReader:
         "CFG",
         "WIDTH",
         "HEIGHT",
-        "FILE_NAME",
+        "FILENAME",
         "SETTINGS",
     )
 
@@ -256,7 +256,8 @@ class SDPromptSaver:
             "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
-    RETURN_TYPES = ()
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("FILENAME", "METADATA")
     FUNCTION = "save_images"
 
     OUTPUT_NODE = True
@@ -304,7 +305,9 @@ class SDPromptSaver:
             images[0].shape[0],
         )
 
-        results = list()
+        results = []
+        files = []
+        comments = []
         for image in images:
             # model_name_str, sampler_name_str, scheduler_str = None, None, None
 
@@ -392,8 +395,11 @@ class SDPromptSaver:
             results.append(
                 {"filename": file.name, "subfolder": str(subfolder), "type": self.type}
             )
+            files.append(str(file))
+            output_to_terminal("Saved file: " + str(file))
+            comments.append(comment)
 
-        return {"ui": {"images": results}}
+        return {"ui": {"images": results}, "result": (files, comments)}
 
     @staticmethod
     def calculate_model_hash(model_name):
