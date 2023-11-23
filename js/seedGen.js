@@ -97,19 +97,19 @@ class SeedControl {
             }
             this.serializedCtx = {};
         };
-        this.node.getExtraMenuOptions = (_, options) => {
-            options.splice(options.length - 1, 0, {
-                content: "Show/Hide Last Seed Value",
-                callback: (_value, _options, _event, _parentMenu, _node) => {
-                    this.node.properties["showLastSeed"] = !this.node.properties["showLastSeed"];
-                    if (this.node.properties["showLastSeed"]) {
-                        this.addLastSeedValue();
-                    } else {
-                        this.removeLastSeedValue();
-                    }
-                },
-            });
-        };
+        // this.node.getExtraMenuOptions = (_, options) => {
+        //     options.splice(options.length - 1, 0, {
+        //         content: "Show/Hide Last Seed Value",
+        //         callback: (_value, _options, _event, _parentMenu, _node) => {
+        //             this.node.properties["showLastSeed"] = !this.node.properties["showLastSeed"];
+        //             if (this.node.properties["showLastSeed"]) {
+        //                 this.addLastSeedValue();
+        //             } else {
+        //                 this.removeLastSeedValue();
+        //             }
+        //         },
+        //     });
+        // };
     }
 
     addLastSeedValue() {
