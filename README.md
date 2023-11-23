@@ -145,7 +145,7 @@ and cannot be used with other custom nodes.
 - For batch processing, please connect the `IMAGE` output of the `Batch Loader` node to the `image` input of 
 the `Prompt Reader` node.
 - The `path` supports relative paths such as `./input/` or absolute paths like `C:/Users/receyuki/Pictures`.
-- Both `\\` and `/` are acceptable.
+- Both `\ ` and `/` are acceptable.
 
 <div align="center">
    <img src="./images/loader.png" width="25%" height="25%" alt="loader node">
