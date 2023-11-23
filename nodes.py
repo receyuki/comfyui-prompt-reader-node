@@ -98,6 +98,7 @@ class SDPromptReader:
         "FLOAT",
         "INT",
         "INT",
+        any_type,
         "STRING",
         "STRING",
     )
@@ -111,6 +112,7 @@ class SDPromptReader:
         "CFG",
         "WIDTH",
         "HEIGHT",
+        "MODEL_NAME",
         "FILENAME",
         "SETTINGS",
     )
@@ -158,6 +160,10 @@ class SDPromptReader:
             cfg = float(
                 self.param_parser(image_data.parameter.get("cfg"), parameter_index) or 0
             )
+            model = str(
+                self.param_parser(image_data.parameter.get("model"), parameter_index)
+                or ""
+            )
             width = int(image_data.width or 0)
             height = int(image_data.height or 0)
 
@@ -178,6 +184,7 @@ class SDPromptReader:
                 cfg,
                 width,
                 height,
+                model,
                 file_path.stem,
                 image_data.setting,
             ),
@@ -501,11 +508,14 @@ class SDParameterGenerator:
         )
     )
 
+    ckpt_list = []
+
     @classmethod
     def INPUT_TYPES(s):
+        SDParameterGenerator.ckpt_list = folder_paths.get_filename_list("checkpoints")
         return {
             "required": {
-                "ckpt_name": (folder_paths.get_filename_list("checkpoints"),),
+                "ckpt_name": (SDParameterGenerator.ckpt_list,),
             },
             "optional": {
                 "vae_name": (
@@ -634,6 +644,9 @@ class SDParameterGenerator:
         output_vae=True,
         output_clip=True,
     ):
+        if ckpt_name not in SDParameterGenerator.ckpt_list:
+            raise FileNotFoundError(f"Invalid ckpt_name: {ckpt_name}")
+
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
         if config_name != "none":
             config_path = folder_paths.get_full_path("configs", config_name)
