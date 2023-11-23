@@ -12,7 +12,12 @@ tk_nodes_path = os.path.join(os.path.dirname(__file__))
 js_dest_path = os.path.join(comfy_path, "web", "extensions", "SDPromptReader")
 os.makedirs(js_dest_path, exist_ok=True)
 
-files_to_copy = ["promptDisplay.js", "parameterDisplay.js", "seedGen.js"]
+files_to_copy = [
+    "promptDisplay.js",
+    "parameterDisplay.js",
+    "seedGen.js",
+    "loaderDisplay.js",
+]
 
 for file in files_to_copy:
     js_src_path = os.path.join(tk_nodes_path, "js", file)
