@@ -53,18 +53,34 @@ output_to_terminal("Node version: " + NODE_VERSION)
 output_to_terminal("Core version: " + CORE_VERSION)
 
 
+class AnyType(str):
+    """A special type that can be connected to any other types. Credit to pythongosssss"""
+
+    def __ne__(self, __value: object) -> bool:
+        return False
+
+
+any_type = AnyType("*")
+
+
 class SDPromptReader:
+    files = []
+
     @classmethod
     def INPUT_TYPES(s):
         input_dir = folder_paths.get_input_directory()
-        files = [
-            f
-            for f in os.listdir(input_dir)
-            if os.path.isfile(os.path.join(input_dir, f))
-        ]
+        SDPromptReader.files = sorted(
+            [
+                f
+                for f in os.listdir(input_dir)
+                if os.path.isfile(os.path.join(input_dir, f))
+            ]
+        )
         return {
             "required": {
-                "image": (sorted(files), {"image_upload": True}),
+                "image": (SDPromptReader.files, {"image_upload": True}),
+            },
+            "optional": {
                 "parameter_index": (
                     "INT",
                     {"default": 0, "min": 0, "max": 255, "step": 1},
@@ -104,7 +120,10 @@ class SDPromptReader:
     OUTPUT_NODE = True
 
     def load_image(self, image, parameter_index):
-        image_path = folder_paths.get_annotated_filepath(image)
+        if image in SDPromptReader.files:
+            image_path = folder_paths.get_annotated_filepath(image)
+        else:
+            image_path = image
         i = Image.open(image_path)
         i = ImageOps.exif_transpose(i)
         image = i.convert("RGB")
@@ -778,12 +797,81 @@ class SDTypeConverter:
         )
 
 
+class SDBatchLoader:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "path": ("STRING", {"default": "./input/"}),
+            },
+            "optional": {
+                "image_load_limit": ("INT", {"default": 0, "min": 0, "step": 1}),
+                "start_index": ("INT", {"default": 0, "min": 0, "step": 1}),
+            },
+        }
+
+    RETURN_TYPES = (any_type,)
+
+    RETURN_NAMES = ("IMAGE",)
+    OUTPUT_IS_LIST = (True,)
+    FUNCTION = "load_path"
+    CATEGORY = "SD Prompt Reader"
+
+    def load_path(
+        self,
+        path: str = "./input/",
+        image_load_limit: int = 0,
+        start_index: int = 0,
+    ):
+        if not Path(path).is_dir():
+            raise FileNotFoundError(f"Invalid directory: {path}")
+
+        files = list(
+            filter(lambda file: file.suffix in SUPPORTED_FORMATS, Path(path).iterdir())
+        )
+
+        files = (
+            sorted(files)[start_index : start_index + image_load_limit]
+            if image_load_limit > 0
+            else sorted(files)[start_index:]
+        )
+
+        files_str = list(map(str, files))
+        return {
+            "ui": {
+                "text": ("\n".join(files_str),),
+            },
+            "result": (files_str,),
+        }
+
+    @classmethod
+    def IS_CHANGED(
+        s,
+        path,
+        image_load_limit,
+        start_index,
+    ):
+        return os.listdir(path)
+
+    @classmethod
+    def VALIDATE_INPUTS(
+        s,
+        path,
+        image_load_limit,
+        start_index,
+    ):
+        if not Path(path).is_dir():
+            return f"Invalid directory: {path}"
+        return True
+
+
 NODE_CLASS_MAPPINGS = {
     "SDPromptReader": SDPromptReader,
     "SDPromptSaver": SDPromptSaver,
     "SDParameterGenerator": SDParameterGenerator,
     "SDPromptMerger": SDPromptMerger,
     "SDTypeConverter": SDTypeConverter,
+    "SDBatchLoader": SDBatchLoader,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -792,4 +880,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SDParameterGenerator": "SD Parameter Generator",
     "SDPromptMerger": "SD Prompt Merger",
     "SDTypeConverter": "SD Type Converter",
+    "SDBatchLoader": "SD Batch Loader",
 }
