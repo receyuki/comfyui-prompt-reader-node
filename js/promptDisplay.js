@@ -34,9 +34,9 @@ app.registerExtension({
             const onExecuted = nodeType.prototype.onExecuted;
             nodeType.prototype.onExecuted = function (message) {
                 onExecuted?.apply(this, arguments);
-                this.widgets[3].value = message.text[0];
-                this.widgets[4].value = message.text[1];
-                this.widgets[5].value = message.text[2];
+                this.widgets.find(obj => obj.name === "positive").value = message.text[0];
+                this.widgets.find(obj => obj.name === "negative").value = message.text[1];
+                this.widgets.find(obj => obj.name === "setting").value = message.text[2];
             };
         }
     },
