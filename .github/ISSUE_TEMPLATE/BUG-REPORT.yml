@@ -34,14 +34,3 @@ body:
         ![DESCRIPTION](LINK.png)
     validations:
       required: false
-  - type: dropdown
-    id: version
-    attributes:
-      label: "Version"
-      description: What version are you running?
-      multiple: false
-      options:
-        - 1.0.0
-      default: 0
-    validations:
-      required: false
