@@ -748,7 +748,8 @@ class SDPromptMerger:
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": {
+            "required": {},
+            "optional": {
                 "text_g": (
                     "STRING",
                     {"default": "", "multiline": True, "forceInput": True},
@@ -764,10 +765,8 @@ class SDPromptMerger:
     FUNCTION = "merge_prompt"
     CATEGORY = "SD Prompt Reader"
 
-    def merge_prompt(self, text_g, text_l):
-        if text_l == "":
-            return text_g
-        return (text_g + "\n" + text_l,)
+    def merge_prompt(self, text_g="", text_l=""):
+        return (text_g + ("\n" + text_l if text_g and text_l else text_l),)
 
 
 class SDTypeConverter:
