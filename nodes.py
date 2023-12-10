@@ -65,9 +65,17 @@ any_type = AnyType("*")
 
 class SDPromptReader:
     files = []
+    ckpt_paths = []
+    ckpt_names = []
+    ckpt_stems = []
 
     @classmethod
     def INPUT_TYPES(s):
+        for path in folder_paths.get_filename_list("checkpoints"):
+            SDPromptReader.ckpt_paths.append(path)
+            SDPromptReader.ckpt_names.append(Path(path).name)
+            SDPromptReader.ckpt_stems.append(Path(path).stem)
+
         input_dir = folder_paths.get_input_directory()
         SDPromptReader.files = sorted(
             [
@@ -170,6 +178,9 @@ class SDPromptReader:
             output_to_terminal("Positive: \n" + image_data.positive)
             output_to_terminal("Negative: \n" + image_data.negative)
             output_to_terminal("Setting: \n" + image_data.setting)
+
+            model = self.search_model(model)
+
         return {
             "ui": {
                 "text": (image_data.positive, image_data.negative, image_data.setting)
@@ -194,6 +205,27 @@ class SDPromptReader:
     def param_parser(data: str, index: int):
         data_list = data.strip("()").split(",")
         return data_list[0] if len(data_list) == 1 else data_list[index]
+
+    @staticmethod
+    def search_model(model: str):
+        if not model or model in SDPromptReader.ckpt_paths:
+            return model
+
+        model_path = Path(model)
+        model_name = model_path.name
+        model_stem = model_path.stem
+
+        if model_name in SDPromptReader.ckpt_names:
+            return SDPromptReader.ckpt_paths[
+                SDPromptReader.ckpt_names.index(model_name)
+            ]
+
+        if model_stem in SDPromptReader.ckpt_stems:
+            return SDPromptReader.ckpt_paths[
+                SDPromptReader.ckpt_stems.index(model_stem)
+            ]
+
+        return model
 
     @classmethod
     def IS_CHANGED(s, image, parameter_index):
