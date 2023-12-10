@@ -282,8 +282,8 @@ class SDPromptSaver:
             "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
-    RETURN_TYPES = ("STRING", "STRING")
-    RETURN_NAMES = ("FILENAME", "METADATA")
+    RETURN_TYPES = ("STRING", "STRING", "STRING")
+    RETURN_NAMES = ("FILENAME", "FILE_PATH", "METADATA")
     FUNCTION = "save_images"
 
     OUTPUT_NODE = True
@@ -334,6 +334,7 @@ class SDPromptSaver:
         results = []
         files = []
         comments = []
+        file_paths = []
         for image in images:
             # model_name_str, sampler_name_str, scheduler_str = None, None, None
 
@@ -386,6 +387,7 @@ class SDPromptSaver:
 
             stem = self.get_path(filename, variable_map)
             file = self.get_unique_filename(stem, extension, output_folder)
+            file_path = output_folder / file
 
             if extension == "png":
                 if not args.disable_metadata:
@@ -397,13 +399,13 @@ class SDPromptSaver:
                         for x in extra_pnginfo:
                             metadata.add_text(x, json.dumps(extra_pnginfo[x]))
                 img.save(
-                    output_folder / file,
+                    file_path,
                     pnginfo=metadata,
                     compress_level=4,
                 )
             else:
                 img.save(
-                    output_folder / file,
+                    file_path,
                     quality=jpg_webp_quality,
                     lossless=lossless_webp,
                 )
@@ -417,15 +419,16 @@ class SDPromptSaver:
                             },
                         }
                     )
-                    piexif.insert(metadata, str(output_folder / file))
+                    piexif.insert(metadata, str(file_path))
             results.append(
                 {"filename": file.name, "subfolder": str(subfolder), "type": self.type}
             )
             files.append(str(file))
+            file_paths.append(str(file_path))
             output_to_terminal("Saved file: " + str(file))
             comments.append(comment)
 
-        return {"ui": {"images": results}, "result": (files, comments)}
+        return {"ui": {"images": results}, "result": (files, file_paths, comments)}
 
     @staticmethod
     def calculate_model_hash(model_name):
