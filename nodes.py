@@ -839,7 +839,22 @@ class SDBatchLoader:
         image_load_limit: int = 0,
         start_index: int = 0,
     ):
-        if not Path(path).is_dir():
+        if isinstance(path, list):
+            files_str = [str(Path(p)) for p in path if Path(p).exists()]
+            return {
+                "ui": {
+                    "text": ("\n".join(files_str),),
+                },
+                "result": (files_str,),
+            }
+        elif Path(path).is_file():
+            return {
+                "ui": {
+                    "text": (str(Path(path)),),
+                },
+                "result": ([str(Path(path))],),
+            }
+        elif not Path(path).is_dir():
             raise FileNotFoundError(f"Invalid directory: {path}")
 
         files = list(
@@ -876,6 +891,8 @@ class SDBatchLoader:
         image_load_limit,
         start_index,
     ):
+        if Path(path).is_file():
+            return True
         if not Path(path).is_dir():
             return f"Invalid directory: {path}"
         return True
