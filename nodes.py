@@ -277,6 +277,7 @@ class SDPromptSaver:
                     "STRING",
                     {"default": "%H%M%S", "multiline": False},
                 ),
+                "save_metadata_file": ("BOOLEAN", {"default": False}),
                 "extra_info": ("STRING", {"default": "", "multiline": True}),
             },
             "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
@@ -314,6 +315,7 @@ class SDPromptSaver:
         jpg_webp_quality: int = 100,
         date_format: str = "%Y-%m-%d",
         time_format: str = "%H%M%S",
+        save_metadata_file: bool = False,
         extra_info: str = "",
         prompt=None,
         extra_pnginfo=None,
@@ -420,6 +422,11 @@ class SDPromptSaver:
                         }
                     )
                     piexif.insert(metadata, str(file_path))
+
+            if save_metadata_file:
+                with open(file_path.with_suffix(".txt"), "w", encoding="utf-8") as f:
+                    f.write(comment)
+
             results.append(
                 {"filename": file.name, "subfolder": str(subfolder), "type": self.type}
             )
