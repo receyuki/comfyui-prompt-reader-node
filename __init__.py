@@ -17,6 +17,7 @@ files_to_copy = [
     "parameterDisplay.js",
     "seedGen.js",
     "loaderDisplay.js",
+    "extractorDisplay.js",
 ]
 
 for file in files_to_copy:

@@ -12,6 +12,7 @@ from itertools import chain
 
 import torch
 import json
+import re
 import numpy as np
 from pathlib import Path
 from PIL import Image, ImageOps
@@ -936,6 +937,106 @@ class SDBatchLoader:
         return True
 
 
+class SDParameterExtractor:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "settings": (
+                    "STRING",
+                    {"default": "", "multiline": True, "forceInput": True},
+                )
+            },
+            "optional": {
+                "parameter": (
+                    ["parameters not loaded"],
+                    {"default": "parameters not loaded"},
+                ),
+                "value_type": (["STRING", "INT", "FLOAT"], {"default": "STRING"}),
+                "parameter_index": (
+                    "INT",
+                    {"default": 0, "min": 0, "max": 255, "step": 1},
+                ),
+            },
+        }
+
+    RETURN_TYPES = (any_type,)
+
+    RETURN_NAMES = ("VALUE",)
+    FUNCTION = "extract_param"
+    CATEGORY = "SD Prompt Reader"
+
+    def extract_param(
+        self,
+        settings: str = "",
+        parameter: str = "",
+        value_type: str = "STRING",
+        parameter_index: int = 0,
+    ):
+        setting_dict = self.parse_setting(settings)
+        if not settings or not parameter or parameter == "parameters not loaded":
+            return {
+                "ui": {
+                    "text": (list(setting_dict.keys()), ""),
+                },
+                "result": ("",),
+            }
+
+        result = setting_dict.get(parameter)
+
+        try:
+            if isinstance(result, tuple):
+                result = result[parameter_index]
+            if value_type == "INT":
+                result = int(result)
+            elif value_type == "FLOAT":
+                result = float(result)
+        except IndexError:
+            return {
+                "ui": {
+                    "text": (list(setting_dict.keys()), "Parameter index out of range"),
+                },
+                "result": ("",),
+            }
+        except (ValueError, TypeError):
+            return {
+                "ui": {
+                    "text": (
+                        list(setting_dict.keys()),
+                        f"{parameter}: {result}\n"
+                        f"{result} is not a valid number; it will be output as STRING",
+                    ),
+                },
+                "result": (result,),
+            }
+        return {
+            "ui": {
+                "text": (list(setting_dict.keys()), f"{parameter}: {result}"),
+            },
+            "result": (result,),
+        }
+
+    @staticmethod
+    def parse_setting(settings):
+        pattern = re.compile(r"([^:,]+):\s*\(([^)]+)\)|([^:,]+):\s*([^,]+)")
+
+        matches = pattern.findall(settings)
+
+        result = {}
+        for match in matches:
+            key, value_paren, key_nonparen, value_nonparen = match
+            if key:
+                key = key.strip()
+                value = value_paren.strip()
+                value = tuple(v.strip() for v in value.split(","))
+            else:
+                key = key_nonparen.strip()
+                value = value_nonparen.strip()
+            result[key] = value
+
+        return result
+
+
 NODE_CLASS_MAPPINGS = {
     "SDPromptReader": SDPromptReader,
     "SDPromptSaver": SDPromptSaver,
@@ -943,6 +1044,7 @@ NODE_CLASS_MAPPINGS = {
     "SDPromptMerger": SDPromptMerger,
     "SDTypeConverter": SDTypeConverter,
     "SDBatchLoader": SDBatchLoader,
+    "SDParameterExtractor": SDParameterExtractor,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -952,4 +1054,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SDPromptMerger": "SD Prompt Merger",
     "SDTypeConverter": "SD Type Converter",
     "SDBatchLoader": "SD Batch Loader",
+    "SDParameterExtractor": "SD Parameter Extractor",
 }
