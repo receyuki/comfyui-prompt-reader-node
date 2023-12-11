@@ -961,8 +961,8 @@ class SDParameterExtractor:
         }
 
     RETURN_TYPES = (any_type,)
-
     RETURN_NAMES = ("VALUE",)
+    OUTPUT_NODE = True
     FUNCTION = "extract_param"
     CATEGORY = "SD Prompt Reader"
 
