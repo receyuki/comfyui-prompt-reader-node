@@ -866,6 +866,7 @@ class SDBatchLoader:
 
     RETURN_NAMES = ("IMAGE",)
     OUTPUT_IS_LIST = (True,)
+    OUTPUT_NODE = True
     FUNCTION = "load_path"
     CATEGORY = "SD Prompt Reader"
 
