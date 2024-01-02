@@ -230,16 +230,13 @@ class SDPromptReader:
 
     @classmethod
     def IS_CHANGED(s, image, parameter_index):
-        image_path = folder_paths.get_annotated_filepath(image)
+        if image in SDPromptReader.files:
+            image_path = folder_paths.get_annotated_filepath(image)
+        else:
+            image_path = image
         with open(Path(image_path), "rb") as f:
             image_data = ImageDataReader(f)
         return image_data.props
-
-    @classmethod
-    def VALIDATE_INPUTS(s, image, parameter_index):
-        if not folder_paths.exists_annotated_filepath(image):
-            return "Invalid image file: {}".format(image)
-        return True
 
 
 class SDPromptSaver:
