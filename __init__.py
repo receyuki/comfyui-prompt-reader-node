@@ -13,6 +13,7 @@ js_dest_path = os.path.join(comfy_path, "web", "extensions", "SDPromptReader")
 os.makedirs(js_dest_path, exist_ok=True)
 
 files_to_copy = [
+    "utils.js",
     "promptDisplay.js",
     "parameterDisplay.js",
     "seedGen.js",

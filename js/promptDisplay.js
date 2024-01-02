@@ -1,13 +1,6 @@
 import {app} from "../../scripts/app.js";
 import {ComfyWidgets} from "../../scripts/widgets.js";
-
-// Create a read-only string widget with opacity set
-function createWidget(app, node, widgetName) {
-    const widget = ComfyWidgets["STRING"](node, widgetName, ["STRING", {multiline: true}], app).widget;
-    widget.inputEl.readOnly = true;
-    widget.inputEl.style.opacity = 0.7;
-    return widget;
-}
+import {createTextWidget} from "./utils.js"
 
 // Displays prompt and setting on the node
 app.registerExtension({
@@ -20,9 +13,10 @@ app.registerExtension({
                 const result = onNodeCreated?.apply(this, arguments);
 
                 // Create prompt and setting widgets
-                const positive = createWidget(app, this, "positive");
-                const negative = createWidget(app, this, "negative");
-                const setting = createWidget(app, this, "setting");
+                const styles = {opacity: 0.7}
+                const positive = createTextWidget(app, this, "positive", styles);
+                const negative = createTextWidget(app, this, "negative", styles);
+                const setting = createTextWidget(app, this, "setting", styles);
                 // Resize the node
                 const nodeWidth = this.size[0];
                 const nodeHeight = this.size[1];

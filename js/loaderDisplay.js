@@ -1,13 +1,6 @@
 import {app} from "../../scripts/app.js";
 import {ComfyWidgets} from "../../scripts/widgets.js";
-
-// Create a read-only string widget with opacity set
-function createWidget(app, node, widgetName) {
-    const widget = ComfyWidgets["STRING"](node, widgetName, ["STRING", {multiline: true}], app).widget;
-    widget.inputEl.readOnly = true;
-    widget.inputEl.style.opacity = 0.7;
-    return widget;
-}
+import {createTextWidget} from "./utils.js"
 
 // Displays file list on the node
 app.registerExtension({
@@ -20,7 +13,8 @@ app.registerExtension({
                 const result = onNodeCreated?.apply(this, arguments);
 
                 // Create prompt and setting widgets
-                const fileList = createWidget(app, this, "fileList");
+                const styles = {opacity: 0.7}
+                const fileList =createTextWidget(app, this, "fileList", styles);
                 return result;
             };
 

@@ -1,14 +1,6 @@
 import {app} from "../../scripts/app.js";
 import {ComfyWidgets} from "../../scripts/widgets.js";
-
-// Create a read-only string widget
-function createWidget(app, node, widgetName, type) {
-    const widget = ComfyWidgets[type](node, widgetName, ["STRING", {multiline: true}], app).widget;
-    widget.inputEl.readOnly = true;
-    widget.inputEl.style.textAlign = "center";
-    widget.inputEl.style.fontSize = "0.75rem";
-    return widget;
-}
+import {createTextWidget} from "./utils.js"
 
 app.registerExtension({
     name: "sd_prompt_reader.parameterDisplay",
@@ -20,8 +12,9 @@ app.registerExtension({
                 const result = onNodeCreated?.apply(this, arguments);
 
                 // Create widgets
-                const steps_display = createWidget(app, this, "steps_display", "STRING");
-                const aspect_ratio_display = createWidget(app, this, "aspect_ratio_display", "STRING");
+                const styles = {textAlign: "center", fontSize: "0.75rem"}
+                const steps_display = createTextWidget(app, this, "steps_display", styles);
+                const aspect_ratio_display = createTextWidget(app, this, "aspect_ratio_display", styles);
 
                 // Resize the node
                 const nodeWidth = this.size[0];

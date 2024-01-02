@@ -1,14 +1,6 @@
 import {app} from "../../scripts/app.js";
 import {ComfyWidgets} from "../../scripts/widgets.js";
-
-// Create a read-only string widget
-function createWidget(app, node, widgetName, type) {
-    const widget = ComfyWidgets[type](node, widgetName, ["STRING", {multiline: true}], app).widget;
-    widget.inputEl.readOnly = true;
-    widget.inputEl.style.textAlign = "center";
-    widget.inputEl.style.fontSize = "0.75rem";
-    return widget;
-}
+import {createTextWidget} from "./utils.js"
 
 app.registerExtension({
     name: "sd_prompt_reader.extractorDisplay",
@@ -20,7 +12,8 @@ app.registerExtension({
                 const result = onNodeCreated?.apply(this, arguments);
 
                 // Create widgets
-                const value_display = createWidget(app, this, "value_display", "STRING");
+                const styles = {textAlign: "center", fontSize: "0.75rem"}
+                const value_display =  createTextWidget(app, this, "value_display", styles);
             };
 
             // Update widgets
