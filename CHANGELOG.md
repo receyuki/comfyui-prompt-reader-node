@@ -1,4 +1,8 @@
 # Change Log
+## v1.2.1
+- Fix the input validation of the `Prompt Reader` node #37
+- Fix the `Batch Loader` node not working when not connected to any node
+
 ## v1.2.0
 - Add `Parameter Extractor` node #24
 - Add a model matching feature to the `Prompt Reader` node #24
