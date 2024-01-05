@@ -400,11 +400,17 @@ class SDPromptSaver:
             i = 255.0 * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             metadata = None
-            model_hash = (
-                f"Model hash: {self.calculate_model_hash(model_name_real)}, "
-                if calculate_model_hash
-                else ""
-            )
+
+            hashes = {}
+            if calculate_model_hash:
+                model_hash = self.calculate_model_hash(model_name_real)
+                model_hash_str = f"Model hash: {model_hash}, "
+                hashes["model"] = model_hash
+            else:
+                model_hash_str = ""
+
+            hashes_str = f"Hashes: {json.dumps(hashes)}, " if hashes else ""
+
             comment = (
                 f"{positive}\n"
                 f"Negative prompt: {negative}\n"
@@ -413,9 +419,10 @@ class SDPromptSaver:
                 f"CFG scale: {cfg}, "
                 f"Seed: {seed}, "
                 f"Size: {img.width if width==0 else width}x{img.height if height==0 else height}, "
-                f"{model_hash}"
+                f"{model_hash_str}"
                 f"Model: {Path(model_name_real).stem}, "
                 f"Version: ComfyUI"
+                f"{hashes_str}"
                 f"{extra_info_real}"
             )
 
