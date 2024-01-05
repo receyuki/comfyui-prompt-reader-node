@@ -1,6 +1,6 @@
 {
-  "last_node_id": 9,
-  "last_link_id": 39,
+  "last_node_id": 10,
+  "last_link_id": 50,
   "nodes": [
     {
       "id": 4,
@@ -14,7 +14,7 @@
         "1": 74
       },
       "flags": {},
-      "order": 4,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -141,7 +141,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            34
+            42
           ],
           "shape": 3,
           "slot_index": 0
@@ -163,7 +163,7 @@
         "1": 54
       },
       "flags": {},
-      "order": 2,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -198,147 +198,6 @@
       },
       "widgets_values": [
         ""
-      ]
-    },
-    {
-      "id": 3,
-      "type": "SDPromptSaver",
-      "pos": [
-        1210,
-        130
-      ],
-      "size": {
-        "0": 320,
-        "1": 500
-      },
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 34
-        },
-        {
-          "name": "model_name",
-          "type": "COMBO",
-          "link": 16,
-          "widget": {
-            "name": "model_name"
-          }
-        },
-        {
-          "name": "seed",
-          "type": "INT",
-          "link": 26,
-          "widget": {
-            "name": "seed"
-          }
-        },
-        {
-          "name": "steps",
-          "type": "INT",
-          "link": null,
-          "widget": {
-            "name": "steps"
-          }
-        },
-        {
-          "name": "cfg",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "cfg"
-          }
-        },
-        {
-          "name": "sampler_name",
-          "type": "COMBO",
-          "link": 14,
-          "widget": {
-            "name": "sampler_name"
-          }
-        },
-        {
-          "name": "scheduler",
-          "type": "COMBO",
-          "link": 13,
-          "widget": {
-            "name": "scheduler"
-          }
-        },
-        {
-          "name": "width",
-          "type": "INT",
-          "link": 29,
-          "widget": {
-            "name": "width"
-          }
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "link": 28,
-          "widget": {
-            "name": "height"
-          }
-        },
-        {
-          "name": "positive",
-          "type": "STRING",
-          "link": null,
-          "widget": {
-            "name": "positive"
-          }
-        },
-        {
-          "name": "negative",
-          "type": "STRING",
-          "link": null,
-          "widget": {
-            "name": "negative"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "FILENAME",
-          "type": "STRING",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "METADATA",
-          "type": "STRING",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "SDPromptSaver"
-      },
-      "widgets_values": [
-        "ComfyUI_%time_%seed_%counter",
-        "%date/",
-        "CheckpointYesmix_v20.safetensors",
-        822116345397686,
-        "randomize",
-        20,
-        8,
-        "euler",
-        "normal",
-        1,
-        1,
-        "",
-        "",
-        "png",
-        false,
-        true,
-        100,
-        "%Y-%m-%d",
-        "%H%M%S",
-        "ComfyUI Example Image"
       ]
     },
     {
@@ -445,18 +304,193 @@
       ]
     },
     {
+      "id": 2,
+      "type": "SDParameterGenerator",
+      "pos": [
+        470,
+        130
+      ],
+      "size": {
+        "0": 320,
+        "1": 900
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MODEL_NAME",
+          "type": "COMBO",
+          "links": [
+            43
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            20,
+            32
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            21
+          ],
+          "shape": 3,
+          "slot_index": 3
+        },
+        {
+          "name": "SEED",
+          "type": "INT",
+          "links": [
+            24,
+            44
+          ],
+          "shape": 3,
+          "slot_index": 4
+        },
+        {
+          "name": "STEPS",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "REFINER_START_STEP",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "CFG",
+          "type": "FLOAT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "SAMPLER_NAME",
+          "type": "COMBO",
+          "links": [
+            15,
+            45
+          ],
+          "shape": 3,
+          "slot_index": 8
+        },
+        {
+          "name": "SCHEDULER",
+          "type": "COMBO",
+          "links": [
+            12,
+            46
+          ],
+          "shape": 3,
+          "slot_index": 9
+        },
+        {
+          "name": "POSITIVE_ASCORE",
+          "type": "FLOAT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "NEGATIVE_ASCORE",
+          "type": "FLOAT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "WIDTH",
+          "type": "INT",
+          "links": [
+            10,
+            47
+          ],
+          "shape": 3,
+          "slot_index": 12
+        },
+        {
+          "name": "HEIGHT",
+          "type": "INT",
+          "links": [
+            11,
+            48
+          ],
+          "shape": 3,
+          "slot_index": 13
+        },
+        {
+          "name": "BATCH_SIZE",
+          "type": "INT",
+          "links": [
+            9
+          ],
+          "shape": 3,
+          "slot_index": 14
+        },
+        {
+          "name": "PARAMETERS",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDParameterGenerator"
+      },
+      "widgets_values": [
+        "xxmix9realistic_v40.safetensors",
+        "baked VAE",
+        "SDv1 512px",
+        "none",
+        -1,
+        30,
+        1,
+        8,
+        "dpmpp_2m",
+        "karras",
+        6,
+        6,
+        "1:1 - 512x512",
+        512,
+        512,
+        1,
+        "Total steps: 30,\nRefiner off",
+        "Optimal resolution for SDv1 512px model\nwith aspect ratio 1:1: 512 x 512",
+        null,
+        null,
+        null
+      ]
+    },
+    {
       "id": 9,
       "type": "SDPromptReader",
       "pos": [
         100,
         130
       ],
-      "size": [
-        320,
-        900
-      ],
+      "size": {
+        "0": 320,
+        "1": 900
+      },
       "flags": {},
-      "order": 0,
+      "order": 1,
       "mode": 0,
       "outputs": [
         {
@@ -475,7 +509,8 @@
           "name": "POSITIVE",
           "type": "STRING",
           "links": [
-            37
+            37,
+            49
           ],
           "shape": 3,
           "slot_index": 2
@@ -484,7 +519,8 @@
           "name": "NEGATIVE",
           "type": "STRING",
           "links": [
-            38
+            38,
+            50
           ],
           "shape": 3,
           "slot_index": 3
@@ -558,178 +594,151 @@
       ]
     },
     {
-      "id": 2,
-      "type": "SDParameterGenerator",
+      "id": 10,
+      "type": "SDPromptSaver",
       "pos": [
-        470,
+        1210,
         130
       ],
-      "size": {
-        "0": 320,
-        "1": 900
-      },
+      "size": [
+        320,
+        550
+      ],
       "flags": {},
-      "order": 1,
+      "order": 7,
       "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 42
+        },
+        {
+          "name": "model_name",
+          "type": 0,
+          "link": 43,
+          "widget": {
+            "name": "model_name"
+          }
+        },
+        {
+          "name": "seed",
+          "type": 0,
+          "link": 44,
+          "widget": {
+            "name": "seed"
+          }
+        },
+        {
+          "name": "steps",
+          "type": 0,
+          "link": null,
+          "widget": {
+            "name": "steps"
+          }
+        },
+        {
+          "name": "cfg",
+          "type": 0,
+          "link": null,
+          "widget": {
+            "name": "cfg"
+          }
+        },
+        {
+          "name": "sampler_name",
+          "type": 0,
+          "link": 45,
+          "widget": {
+            "name": "sampler_name"
+          }
+        },
+        {
+          "name": "scheduler",
+          "type": 0,
+          "link": 46,
+          "widget": {
+            "name": "scheduler"
+          }
+        },
+        {
+          "name": "width",
+          "type": 0,
+          "link": 47,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": 0,
+          "link": 48,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "positive",
+          "type": 0,
+          "link": 49,
+          "widget": {
+            "name": "positive"
+          }
+        },
+        {
+          "name": "negative",
+          "type": 0,
+          "link": 50,
+          "widget": {
+            "name": "negative"
+          }
+        }
+      ],
       "outputs": [
         {
-          "name": "MODEL_NAME",
-          "type": "COMBO",
-          "links": [
-            16
-          ],
-          "shape": 3,
-          "slot_index": 0
-        },
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            17
-          ],
-          "shape": 3,
-          "slot_index": 1
-        },
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            20,
-            32
-          ],
-          "shape": 3,
-          "slot_index": 2
-        },
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            21
-          ],
-          "shape": 3,
-          "slot_index": 3
-        },
-        {
-          "name": "SEED",
-          "type": "INT",
-          "links": [
-            24,
-            26
-          ],
-          "shape": 3,
-          "slot_index": 4
-        },
-        {
-          "name": "STEPS",
-          "type": "INT",
+          "name": "FILENAME",
+          "type": "STRING",
           "links": null,
           "shape": 3
         },
         {
-          "name": "REFINER_START_STEP",
-          "type": "INT",
+          "name": "FILE_PATH",
+          "type": "STRING",
           "links": null,
           "shape": 3
         },
         {
-          "name": "CFG",
-          "type": "FLOAT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "SAMPLER_NAME",
-          "type": "COMBO",
-          "links": [
-            14,
-            15
-          ],
-          "shape": 3,
-          "slot_index": 8
-        },
-        {
-          "name": "SCHEDULER",
-          "type": "COMBO",
-          "links": [
-            12,
-            13
-          ],
-          "shape": 3,
-          "slot_index": 9
-        },
-        {
-          "name": "POSITIVE_ASCORE",
-          "type": "FLOAT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "NEGATIVE_ASCORE",
-          "type": "FLOAT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "WIDTH",
-          "type": "INT",
-          "links": [
-            10,
-            29
-          ],
-          "shape": 3,
-          "slot_index": 12
-        },
-        {
-          "name": "HEIGHT",
-          "type": "INT",
-          "links": [
-            11,
-            28
-          ],
-          "shape": 3,
-          "slot_index": 13
-        },
-        {
-          "name": "BATCH_SIZE",
-          "type": "INT",
-          "links": [
-            9
-          ],
-          "shape": 3,
-          "slot_index": 14
-        },
-        {
-          "name": "PARAMETERS",
+          "name": "METADATA",
           "type": "STRING",
           "links": null,
           "shape": 3
         }
       ],
       "properties": {
-        "Node name for S&R": "SDParameterGenerator"
+        "Node name for S&R": "SDPromptSaver"
       },
       "widgets_values": [
-        "xxmix9realistic_v40.safetensors",
-        "baked VAE",
-        "SDv1 512px",
-        "none",
-        546889506427388,
-        30,
-        1,
+        "ComfyUI_%time_%seed_%counter",
+        "%date/",
+        "CheckpointYesmix_v35.safetensors",
+        0,
+        "randomize",
+        20,
         8,
-        "dpmpp_2m",
-        "karras",
-        6,
-        6,
-        "1:1 - 512x512",
-        512,
-        512,
+        "euler",
+        "normal",
         1,
-        "Total steps: 30,\nRefiner off",
-        "Optimal resolution for SDv1 512px model\nwith aspect ratio 1:1: 512 x 512",
-        null,
-        null,
-        null
+        1,
+        "",
+        "",
+        "png",
+        false,
+        true,
+        100,
+        "%Y-%m-%d",
+        "%H%M%S",
+        false,
+        "ComfyUI Example Image"
       ]
     }
   ],
@@ -767,35 +776,11 @@
       "COMBO"
     ],
     [
-      13,
-      2,
-      9,
-      3,
-      6,
-      "COMBO"
-    ],
-    [
-      14,
-      2,
-      8,
-      3,
-      5,
-      "COMBO"
-    ],
-    [
       15,
       2,
       8,
       8,
       7,
-      "COMBO"
-    ],
-    [
-      16,
-      2,
-      0,
-      3,
-      1,
       "COMBO"
     ],
     [
@@ -855,44 +840,12 @@
       "INT"
     ],
     [
-      26,
-      2,
-      4,
-      3,
-      2,
-      "INT"
-    ],
-    [
-      28,
-      2,
-      13,
-      3,
-      8,
-      "INT"
-    ],
-    [
-      29,
-      2,
-      12,
-      3,
-      7,
-      "INT"
-    ],
-    [
       32,
       2,
       2,
       7,
       0,
       "CLIP"
-    ],
-    [
-      34,
-      5,
-      0,
-      3,
-      0,
-      "IMAGE"
     ],
     [
       35,
@@ -933,6 +886,78 @@
       8,
       2,
       "CONDITIONING"
+    ],
+    [
+      42,
+      5,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      43,
+      2,
+      0,
+      10,
+      1,
+      "COMBO"
+    ],
+    [
+      44,
+      2,
+      4,
+      10,
+      2,
+      "INT"
+    ],
+    [
+      45,
+      2,
+      8,
+      10,
+      5,
+      "COMBO"
+    ],
+    [
+      46,
+      2,
+      9,
+      10,
+      6,
+      "COMBO"
+    ],
+    [
+      47,
+      2,
+      12,
+      10,
+      7,
+      "INT"
+    ],
+    [
+      48,
+      2,
+      13,
+      10,
+      8,
+      "INT"
+    ],
+    [
+      49,
+      9,
+      2,
+      10,
+      9,
+      "STRING"
+    ],
+    [
+      50,
+      9,
+      3,
+      10,
+      10,
+      "STRING"
     ]
   ],
   "groups": [],
