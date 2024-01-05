@@ -921,19 +921,6 @@ class SDBatchLoader:
     ):
         return os.listdir(path)
 
-    @classmethod
-    def VALIDATE_INPUTS(
-        s,
-        path,
-        image_load_limit,
-        start_index,
-    ):
-        if Path(path).is_file():
-            return True
-        if not Path(path).is_dir():
-            return f"Invalid directory: {path}"
-        return True
-
 
 class SDParameterExtractor:
     @classmethod
