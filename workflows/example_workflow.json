@@ -1,6 +1,6 @@
 {
   "last_node_id": 10,
-  "last_link_id": 50,
+  "last_link_id": 56,
   "nodes": [
     {
       "id": 4,
@@ -14,7 +14,7 @@
         "1": 74
       },
       "flags": {},
-      "order": 2,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -163,7 +163,7 @@
         "1": 54
       },
       "flags": {},
-      "order": 4,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -247,7 +247,7 @@
         {
           "name": "steps",
           "type": "INT",
-          "link": 35,
+          "link": 53,
           "widget": {
             "name": "steps"
           }
@@ -255,7 +255,7 @@
         {
           "name": "cfg",
           "type": "FLOAT",
-          "link": 36,
+          "link": 55,
           "widget": {
             "name": "cfg"
           }
@@ -304,306 +304,16 @@
       ]
     },
     {
-      "id": 2,
-      "type": "SDParameterGenerator",
-      "pos": [
-        470,
-        130
-      ],
-      "size": {
-        "0": 320,
-        "1": 900
-      },
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "MODEL_NAME",
-          "type": "COMBO",
-          "links": [
-            43
-          ],
-          "shape": 3,
-          "slot_index": 0
-        },
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            17
-          ],
-          "shape": 3,
-          "slot_index": 1
-        },
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            20,
-            32
-          ],
-          "shape": 3,
-          "slot_index": 2
-        },
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            21
-          ],
-          "shape": 3,
-          "slot_index": 3
-        },
-        {
-          "name": "SEED",
-          "type": "INT",
-          "links": [
-            24,
-            44
-          ],
-          "shape": 3,
-          "slot_index": 4
-        },
-        {
-          "name": "STEPS",
-          "type": "INT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "REFINER_START_STEP",
-          "type": "INT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "CFG",
-          "type": "FLOAT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "SAMPLER_NAME",
-          "type": "COMBO",
-          "links": [
-            15,
-            45
-          ],
-          "shape": 3,
-          "slot_index": 8
-        },
-        {
-          "name": "SCHEDULER",
-          "type": "COMBO",
-          "links": [
-            12,
-            46
-          ],
-          "shape": 3,
-          "slot_index": 9
-        },
-        {
-          "name": "POSITIVE_ASCORE",
-          "type": "FLOAT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "NEGATIVE_ASCORE",
-          "type": "FLOAT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "WIDTH",
-          "type": "INT",
-          "links": [
-            10,
-            47
-          ],
-          "shape": 3,
-          "slot_index": 12
-        },
-        {
-          "name": "HEIGHT",
-          "type": "INT",
-          "links": [
-            11,
-            48
-          ],
-          "shape": 3,
-          "slot_index": 13
-        },
-        {
-          "name": "BATCH_SIZE",
-          "type": "INT",
-          "links": [
-            9
-          ],
-          "shape": 3,
-          "slot_index": 14
-        },
-        {
-          "name": "PARAMETERS",
-          "type": "STRING",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "SDParameterGenerator"
-      },
-      "widgets_values": [
-        "xxmix9realistic_v40.safetensors",
-        "baked VAE",
-        "SDv1 512px",
-        "none",
-        -1,
-        30,
-        1,
-        8,
-        "dpmpp_2m",
-        "karras",
-        6,
-        6,
-        "1:1 - 512x512",
-        512,
-        512,
-        1,
-        "Total steps: 30,\nRefiner off",
-        "Optimal resolution for SDv1 512px model\nwith aspect ratio 1:1: 512 x 512",
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "id": 9,
-      "type": "SDPromptReader",
-      "pos": [
-        100,
-        130
-      ],
-      "size": {
-        "0": 320,
-        "1": 900
-      },
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "POSITIVE",
-          "type": "STRING",
-          "links": [
-            37,
-            49
-          ],
-          "shape": 3,
-          "slot_index": 2
-        },
-        {
-          "name": "NEGATIVE",
-          "type": "STRING",
-          "links": [
-            38,
-            50
-          ],
-          "shape": 3,
-          "slot_index": 3
-        },
-        {
-          "name": "SEED",
-          "type": "INT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "STEPS",
-          "type": "INT",
-          "links": [
-            35
-          ],
-          "shape": 3,
-          "slot_index": 5
-        },
-        {
-          "name": "CFG",
-          "type": "FLOAT",
-          "links": [
-            36
-          ],
-          "shape": 3,
-          "slot_index": 6
-        },
-        {
-          "name": "WIDTH",
-          "type": "INT",
-          "links": null,
-          "shape": 3,
-          "slot_index": 7
-        },
-        {
-          "name": "HEIGHT",
-          "type": "INT",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "MODEL_NAME",
-          "type": "*",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "FILENAME",
-          "type": "STRING",
-          "links": null,
-          "shape": 3
-        },
-        {
-          "name": "SETTINGS",
-          "type": "STRING",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "SDPromptReader"
-      },
-      "widgets_values": [
-        "00067-2302238556.png",
-        "image",
-        0,
-        "ultra realistic 8k cg, HDR, epic, perfect artwork, masterpiece, bokeh, beautiful face, perfect female body, alluring, perfect female figure, ultra high res, beach, pink hair, seductive posture, seductive gaze, skindentation, 1girl, kpop idol, blush, street, earring, choker, close up, strap dress, half-length portrait, <lora:koreandolllikenessV20_v20:0.3>,  <lora:fashigirl-v6-nai-5ep-resize:0.3>",
-        "grayscale, monochrome, low quality, worst quality, lowres, acnes, bad anatomy, bad hands, deformed, error, logo, mosaic censoring, sketches, skin blemishes, skin spots, text, watermark, FastNegativeV2",
-        "Steps: 35, Sampler: DPM++ 2M Karras, CFG scale: 7.5, Seed: 2302238556, Size: 512x512, Model hash: 18ed2b6c48, Model: xxmix9realistic_v40, Denoising strength: 0.45, Hires upscale: 2, Hires steps: 15, Hires upscaler: R-ESRGAN 4x+, Lora hashes: \"koreandolllikenessV20_v20: 8f3d16e6eada, fashigirl-v6-nai-5ep-resize: 4e0173ae8cef\", Version: 1.6.0"
-      ]
-    },
-    {
       "id": 10,
       "type": "SDPromptSaver",
       "pos": [
         1210,
         130
       ],
-      "size": [
-        320,
-        550
-      ],
+      "size": {
+        "0": 320,
+        "1": 550
+      },
       "flags": {},
       "order": 7,
       "mode": 0,
@@ -632,18 +342,20 @@
         {
           "name": "steps",
           "type": 0,
-          "link": null,
+          "link": 54,
           "widget": {
             "name": "steps"
-          }
+          },
+          "slot_index": 3
         },
         {
           "name": "cfg",
           "type": 0,
-          "link": null,
+          "link": 56,
           "widget": {
             "name": "cfg"
-          }
+          },
+          "slot_index": 4
         },
         {
           "name": "sampler_name",
@@ -739,6 +451,298 @@
         "%H%M%S",
         false,
         "ComfyUI Example Image"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "SDPromptReader",
+      "pos": [
+        100,
+        130
+      ],
+      "size": {
+        "0": 320,
+        "1": 900
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "POSITIVE",
+          "type": "STRING",
+          "links": [
+            37,
+            49
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "NEGATIVE",
+          "type": "STRING",
+          "links": [
+            38,
+            50
+          ],
+          "shape": 3,
+          "slot_index": 3
+        },
+        {
+          "name": "SEED",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "STEPS",
+          "type": "INT",
+          "links": [
+            53,
+            54
+          ],
+          "shape": 3,
+          "slot_index": 5
+        },
+        {
+          "name": "CFG",
+          "type": "FLOAT",
+          "links": [
+            55,
+            56
+          ],
+          "shape": 3,
+          "slot_index": 6
+        },
+        {
+          "name": "WIDTH",
+          "type": "INT",
+          "links": null,
+          "shape": 3,
+          "slot_index": 7
+        },
+        {
+          "name": "HEIGHT",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "MODEL_NAME",
+          "type": "*",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "FILENAME",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "SETTINGS",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDPromptReader"
+      },
+      "widgets_values": [
+        "00067-2302238556.png",
+        "image",
+        0,
+        "ultra realistic 8k cg, HDR, epic, perfect artwork, masterpiece, bokeh, beautiful face, perfect female body, alluring, perfect female figure, ultra high res, beach, pink hair, seductive posture, seductive gaze, skindentation, 1girl, kpop idol, blush, street, earring, choker, close up, strap dress, half-length portrait, <lora:koreandolllikenessV20_v20:0.3>,  <lora:fashigirl-v6-nai-5ep-resize:0.3>",
+        "grayscale, monochrome, low quality, worst quality, lowres, acnes, bad anatomy, bad hands, deformed, error, logo, mosaic censoring, sketches, skin blemishes, skin spots, text, watermark, FastNegativeV2",
+        "Steps: 35, Sampler: DPM++ 2M Karras, CFG scale: 7.5, Seed: 2302238556, Size: 512x512, Model hash: 18ed2b6c48, Model: xxmix9realistic_v40, Denoising strength: 0.45, Hires upscale: 2, Hires steps: 15, Hires upscaler: R-ESRGAN 4x+, Lora hashes: \"koreandolllikenessV20_v20: 8f3d16e6eada, fashigirl-v6-nai-5ep-resize: 4e0173ae8cef\", Version: 1.6.0"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "SDParameterGenerator",
+      "pos": [
+        470,
+        130
+      ],
+      "size": {
+        "0": 320,
+        "1": 900
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MODEL_NAME",
+          "type": "COMBO",
+          "links": [
+            43
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            20,
+            32
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            21
+          ],
+          "shape": 3,
+          "slot_index": 3
+        },
+        {
+          "name": "SEED",
+          "type": "INT",
+          "links": [
+            24,
+            44
+          ],
+          "shape": 3,
+          "slot_index": 4
+        },
+        {
+          "name": "STEPS",
+          "type": "INT",
+          "links": [],
+          "shape": 3
+        },
+        {
+          "name": "REFINER_START_STEP",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "CFG",
+          "type": "FLOAT",
+          "links": [],
+          "shape": 3
+        },
+        {
+          "name": "SAMPLER_NAME",
+          "type": "COMBO",
+          "links": [
+            15,
+            45
+          ],
+          "shape": 3,
+          "slot_index": 8
+        },
+        {
+          "name": "SCHEDULER",
+          "type": "COMBO",
+          "links": [
+            12,
+            46
+          ],
+          "shape": 3,
+          "slot_index": 9
+        },
+        {
+          "name": "POSITIVE_ASCORE",
+          "type": "FLOAT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "NEGATIVE_ASCORE",
+          "type": "FLOAT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "WIDTH",
+          "type": "INT",
+          "links": [
+            10,
+            47
+          ],
+          "shape": 3,
+          "slot_index": 12
+        },
+        {
+          "name": "HEIGHT",
+          "type": "INT",
+          "links": [
+            11,
+            48
+          ],
+          "shape": 3,
+          "slot_index": 13
+        },
+        {
+          "name": "BATCH_SIZE",
+          "type": "INT",
+          "links": [
+            9
+          ],
+          "shape": 3,
+          "slot_index": 14
+        },
+        {
+          "name": "PARAMETERS",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDParameterGenerator"
+      },
+      "widgets_values": [
+        "xxmix9realistic_v40.safetensors",
+        "baked VAE",
+        "SDv1 512px",
+        "none",
+        -1,
+        30,
+        1,
+        8,
+        "dpmpp_2m",
+        "karras",
+        6,
+        6,
+        "1:1 - 512x512",
+        512,
+        512,
+        1,
+        "Total steps: 30,\nRefiner off",
+        "Optimal resolution for SDv1 512px model\nwith aspect ratio 1:1: 512 x 512",
+        null,
+        "",
+        ""
       ]
     }
   ],
@@ -848,22 +852,6 @@
       "CLIP"
     ],
     [
-      35,
-      9,
-      5,
-      8,
-      5,
-      "INT"
-    ],
-    [
-      36,
-      9,
-      6,
-      8,
-      6,
-      "FLOAT"
-    ],
-    [
       37,
       9,
       2,
@@ -958,6 +946,38 @@
       10,
       10,
       "STRING"
+    ],
+    [
+      53,
+      9,
+      5,
+      8,
+      5,
+      "INT"
+    ],
+    [
+      54,
+      9,
+      5,
+      10,
+      3,
+      "INT"
+    ],
+    [
+      55,
+      9,
+      6,
+      8,
+      6,
+      "FLOAT"
+    ],
+    [
+      56,
+      9,
+      6,
+      10,
+      4,
+      "FLOAT"
     ]
   ],
   "groups": [],
