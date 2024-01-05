@@ -240,6 +240,8 @@ class SDPromptReader:
 
 
 class SDPromptSaver:
+    hash_dict = {}
+
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
         self.type = "output"
@@ -469,6 +471,9 @@ class SDPromptSaver:
 
     @staticmethod
     def calculate_model_hash(model_name):
+        if hash_value := SDPromptSaver.hash_dict.get(model_name):
+            return hash_value
+
         hash_sha256 = hashlib.sha256()
         blksize = 1024 * 1024
         file_name = folder_paths.get_full_path("checkpoints", model_name)
@@ -477,7 +482,10 @@ class SDPromptSaver:
             for chunk in iter(lambda: f.read(blksize), b""):
                 hash_sha256.update(chunk)
 
-        return hash_sha256.hexdigest()[:10]
+        hash_value = hash_sha256.hexdigest()[:10]
+        SDPromptSaver.hash_dict[model_name] = hash_value
+
+        return hash_value
 
     @staticmethod
     def get_counter(directory: Path):
