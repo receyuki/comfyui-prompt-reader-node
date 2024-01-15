@@ -1,15 +1,114 @@
 /**
- * Modified from: https://github.com/rgthree/rgthree-comfy/blob/main/web/seed.js
+ * Modified from: https://github.com/rgthree/rgthree-comfy/blob/main/web/comfyui/seed.js
  * Modified by: receyuki
  */
 import {app} from "../../scripts/app.js";
 import {ComfyWidgets} from "../../scripts/widgets.js";
 
-const LAST_SEED_BUTTON_LABEL = "(Use Last Queued Seed)";
+const LAST_SEED_BUTTON_LABEL = "(Use last queued seed)";
 const SPECIAL_SEED_RANDOM = -1;
 const SPECIAL_SEED_INCREMENT = -2;
 const SPECIAL_SEED_DECREMENT = -3;
 const SPECIAL_SEEDS = [SPECIAL_SEED_RANDOM, SPECIAL_SEED_INCREMENT, SPECIAL_SEED_DECREMENT];
+
+function getResolver(timeout = 5000) {
+    const resolver = {};
+    resolver.id = generateId(8);
+    resolver.completed = false;
+    resolver.resolved = false;
+    resolver.rejected = false;
+    resolver.promise = new Promise((resolve, reject) => {
+        resolver.reject = () => {
+            resolver.completed = true;
+            resolver.rejected = true;
+            reject();
+        };
+        resolver.resolve = (data) => {
+            resolver.completed = true;
+            resolver.resolved = true;
+            resolve(data);
+        };
+    });
+    resolver.timeout = setTimeout(() => {
+        if (!resolver.completed) {
+            resolver.reject();
+        }
+    }, timeout);
+    return resolver;
+}
+
+function generateId(length) {
+    const arr = new Uint8Array(length / 2);
+    crypto.getRandomValues(arr);
+    return Array.from(arr, dec2hex).join('');
+}
+
+function dec2hex(dec) {
+    return dec.toString(16).padStart(2, "0");
+}
+
+let graphResolver = null;
+
+function waitForGraph() {
+    if (graphResolver === null) {
+        graphResolver = getResolver();
+
+        function _wait() {
+            if (!graphResolver.completed) {
+                if (app === null || app === void 0 ? void 0 : app.graph) {
+                    graphResolver.resolve(app.graph);
+                } else {
+                    requestAnimationFrame(_wait);
+                }
+            }
+        }
+
+        _wait();
+    }
+    return graphResolver.promise;
+}
+
+class Rgthree extends EventTarget {
+    constructor() {
+        super();
+        this.processingQueue = false;
+        this.initialGraphToPromptSerializedWorkflowBecauseComfyUIBrokeStuff = null;
+        this.initializeGraphAndCanvasHooks();
+        this.initializeComfyUIHooks();
+    }
+
+    async initializeGraphAndCanvasHooks() {
+        const rgthree = this;
+        const [graph] = await Promise.all([waitForGraph()]);
+        const onSerialize = graph.onSerialize;
+        graph.onSerialize = (data) => {
+            this.initialGraphToPromptSerializedWorkflowBecauseComfyUIBrokeStuff = data;
+            onSerialize === null || onSerialize === void 0 ? void 0 : onSerialize.call(graph, data);
+        };
+    }
+
+    initializeComfyUIHooks() {
+        const rgthree = this;
+        const queuePrompt = app.queuePrompt;
+        app.queuePrompt = async function () {
+            rgthree.dispatchEvent(new CustomEvent("queue"));
+            rgthree.processingQueue = true;
+            try {
+                await queuePrompt.apply(app, [...arguments]);
+            } finally {
+                rgthree.processingQueue = false;
+                rgthree.dispatchEvent(new CustomEvent("queue-end"));
+            }
+        };
+    }
+
+    getNodeFromInitialGraphToPromptSerializedWorkflowBecauseComfyUIBrokeStuff(node) {
+        var _a, _b, _c;
+        return ((_c = (_b = (_a = this.initialGraphToPromptSerializedWorkflowBecauseComfyUIBrokeStuff) === null || _a === void 0 ? void 0 : _a.nodes) === null || _b === void 0 ? void 0 : _b.find((n) => n.id === node.id)) !== null && _c !== void 0 ? _c : null);
+    }
+}
+
+const rgthree = new Rgthree();
 
 class SeedControl {
     constructor(node) {
@@ -33,6 +132,7 @@ class SeedControl {
         for (const [i, w] of this.node.widgets.entries()) {
             if (w.name === "seed") {
                 this.seedWidget = w;
+                this.seedWidget.value = SPECIAL_SEED_RANDOM;
             } else if (w.name === "control_after_generate") {
                 this.node.widgets.splice(i, 1);
             }
@@ -58,6 +158,9 @@ class SeedControl {
         this.lastSeedButton.disabled = true;
         this.seedWidget.serializeValue = async (node, index) => {
             const inputSeed = this.seedWidget.value;
+            if (!rgthree.processingQueue) {
+                return inputSeed;
+            }
             this.serializedCtx = {
                 inputSeed: this.seedWidget.value,
             };
@@ -76,7 +179,13 @@ class SeedControl {
             } else {
                 this.serializedCtx.seedUsed = this.seedWidget.value;
             }
-            node.widgets_values[index] = this.serializedCtx.seedUsed;
+            const n = rgthree.getNodeFromInitialGraphToPromptSerializedWorkflowBecauseComfyUIBrokeStuff(node);
+            if (n) {
+                n.widgets_values[index] = this.serializedCtx.seedUsed;
+            } else {
+                console.warn('No serialized node found in workflow. May be attributed to '
+                    + 'https://github.com/comfyanonymous/ComfyUI/issues/2193');
+            }
             this.seedWidget.value = this.serializedCtx.seedUsed;
             this.lastSeed = this.serializedCtx.seedUsed;
             if (SPECIAL_SEEDS.includes(this.serializedCtx.inputSeed)) {
@@ -97,42 +206,6 @@ class SeedControl {
             }
             this.serializedCtx = {};
         };
-        // this.node.getExtraMenuOptions = (_, options) => {
-        //     options.splice(options.length - 1, 0, {
-        //         content: "Show/Hide Last Seed Value",
-        //         callback: (_value, _options, _event, _parentMenu, _node) => {
-        //             this.node.properties["showLastSeed"] = !this.node.properties["showLastSeed"];
-        //             if (this.node.properties["showLastSeed"]) {
-        //                 this.addLastSeedValue();
-        //             } else {
-        //                 this.removeLastSeedValue();
-        //             }
-        //         },
-        //     });
-        // };
-    }
-
-    addLastSeedValue() {
-        if (this.lastSeedValue)
-            return;
-        this.lastSeedValue = ComfyWidgets["STRING"](this.node, "last_seed", ["STRING", {multiline: true}], app).widget;
-        this.lastSeedValue.inputEl.readOnly = true;
-        this.lastSeedValue.inputEl.style.fontSize = "0.75rem";
-        this.lastSeedValue.inputEl.style.textAlign = "center";
-        this.lastSeedValue.serializeValue = async (node, index) => {
-            node.widgets_values[index] = "";
-            return "";
-        };
-        this.node.computeSize();
-    }
-
-    removeLastSeedValue() {
-        if (!this.lastSeedValue)
-            return;
-        this.lastSeedValue.inputEl.remove();
-        this.node.widgets.splice(this.node.widgets.indexOf(this.lastSeedValue), 1);
-        this.lastSeedValue = null;
-        this.node.computeSize();
     }
 }
 
@@ -142,12 +215,8 @@ app.registerExtension({
         if (nodeData.name === "SDParameterGenerator") {
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function () {
-                const result = onNodeCreated?.apply(this, []);
+                onNodeCreated ? onNodeCreated.apply(this, []) : undefined;
                 this.seedControl = new SeedControl(this);
-                const nodeWidth = this.size[0];
-                const nodeHeight = this.size[1];
-                this.setSize([nodeWidth * 1.5, nodeHeight * 1.1]);
-                return result;
             };
         }
     },
