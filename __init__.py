@@ -6,21 +6,10 @@ import shutil
 import folder_paths
 import os
 
+WEB_DIRECTORY = "./js"
+
+# remove old directory
 comfy_path = os.path.dirname(folder_paths.__file__)
-tk_nodes_path = os.path.join(os.path.dirname(__file__))
-
-js_dest_path = os.path.join(comfy_path, "web", "extensions", "SDPromptReader")
-os.makedirs(js_dest_path, exist_ok=True)
-
-files_to_copy = [
-    "utils.js",
-    "promptDisplay.js",
-    "parameterDisplay.js",
-    "seedGen.js",
-    "loaderDisplay.js",
-    "extractorDisplay.js",
-]
-
-for file in files_to_copy:
-    js_src_path = os.path.join(tk_nodes_path, "js", file)
-    shutil.copy(js_src_path, js_dest_path)
+old_dir = os.path.join(comfy_path, "web", "extensions", "SDPromptReader")
+if os.path.exists(old_dir):
+    shutil.rmtree(old_dir)
