@@ -242,6 +242,8 @@ class SDPromptReader:
 class SDPromptSaver:
     model_hash_dict = {}
     vae_hash_dict = {}
+    lora_hash_dict = {}
+    ti_hash_dict = {}
 
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
@@ -289,6 +291,7 @@ class SDPromptSaver:
                 # "sampler_name_str": ("STRING", {"default": ""}),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 # "scheduler_str": ("STRING", {"default": ""}),
+                "lora_name": any_type,
                 "width": (
                     "INT",
                     {"default": 1, "min": 1, "max": MAX_RESOLUTION, "step": 8},
@@ -300,7 +303,8 @@ class SDPromptSaver:
                 "positive": ("STRING", {"default": "", "multiline": True}),
                 "negative": ("STRING", {"default": "", "multiline": True}),
                 "extension": (["png", "jpg", "webp"],),
-                "calculate_hash": ("BOOLEAN", {"default": False}),
+                "calculate_hash": ("BOOLEAN", {"default": True}),
+                "resource_hash": ("BOOLEAN", {"default": True}),
                 "lossless_webp": ("BOOLEAN", {"default": True}),
                 "jpg_webp_quality": ("INT", {"default": 100, "min": 1, "max": 100}),
                 "date_format": (
@@ -340,12 +344,14 @@ class SDPromptSaver:
         sampler_name_str: str = "",
         scheduler: str = "",
         scheduler_str: str = "",
+        lora_name=None,
         width: int = 1,
         height: int = 1,
         positive: str = "",
         negative: str = "",
         extension: str = "png",
-        calculate_hash: bool = False,
+        calculate_hash: bool = True,
+        resource_hash: bool = True,
         lossless_webp: bool = True,
         jpg_webp_quality: int = 100,
         date_format: str = "%Y-%m-%d",
@@ -407,21 +413,38 @@ class SDPromptSaver:
             model_hash_str = ""
             vae_hash_str = ""
             vae_str = ""
+            lora_hash_dict = {}
+            lora_hash_str = ""
 
             if vae_name:
-                vae_str = f"VAE: {vae_name}"
+                vae_str = f"VAE: {Path(vae_name).stem}, "
 
             hashes = {}
             if calculate_hash:
                 model_hash = self.calculate_hash(model_name_real, "model")
                 model_hash_str = f"Model hash: {model_hash}, "
                 hashes["model"] = model_hash
+
                 if vae_name:
                     vae_hash = self.calculate_hash(vae_name, "vae")
                     vae_hash_str = f"VAE hash: {vae_hash}, "
                     hashes["vae"] = vae_hash
 
-            hashes_str = f", Hashes: {json.dumps(hashes)}" if hashes else ""
+                if lora_name:
+                    lora_names = (
+                        lora_name if isinstance(lora_name, list) else [lora_name]
+                    )
+                    lora_names_unique = list(set(lora_names))
+                    for name in lora_names_unique:
+                        lora_hash = self.calculate_hash(name, "lora")
+                        lora_hash_dict[Path(name).stem] = lora_hash
+                        hashes[f"lora:{Path(name).stem}"] = lora_hash
+                    lora_hash_items = [f"{k}: {v}" for k, v in lora_hash_dict.items()]
+                    lora_hash_str_value = ", ".join(lora_hash_items)
+                    lora_hash_str = f'Lora hashes: "{lora_hash_str_value}", '
+            hashes_str = (
+                f", Hashes: {json.dumps(hashes)}" if (hashes and resource_hash) else ""
+            )
 
             comment = (
                 f"{positive}\n"
@@ -435,6 +458,7 @@ class SDPromptSaver:
                 f"Model: {Path(model_name_real).stem}, "
                 f"{vae_hash_str}"
                 f"{vae_str}"
+                f"{lora_hash_str}"
                 f"Version: ComfyUI"
                 f"{hashes_str}"
                 f"{extra_info_real}"
@@ -499,6 +523,9 @@ class SDPromptSaver:
             case "vae":
                 hash_dict = SDPromptSaver.vae_hash_dict
                 file_name = folder_paths.get_full_path("vae", name)
+            case "lora":
+                hash_dict = SDPromptSaver.lora_hash_dict
+                file_name = folder_paths.get_full_path("loras", name)
             case _:
                 return ""
 
@@ -1071,6 +1098,89 @@ class SDParameterExtractor:
         return result
 
 
+class SDLoraLoader:
+    def __init__(self):
+        self.loaded_lora = None
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "model": ("MODEL",),
+                "clip": ("CLIP",),
+                "lora_name": (folder_paths.get_filename_list("loras"),),
+                "strength_model": (
+                    "FLOAT",
+                    {"default": 1.0, "min": -20.0, "max": 20.0, "step": 0.01},
+                ),
+                "strength_clip": (
+                    "FLOAT",
+                    {"default": 1.0, "min": -20.0, "max": 20.0, "step": 0.01},
+                ),
+            },
+            "optional": {
+                "last_lora": (any_type,),
+            },
+        }
+
+    RETURN_TYPES = ("MODEL", "CLIP", any_type)
+    RETURN_NAMES = ("MODEL", "CLIP", "NEXT_LORA")
+    FUNCTION = "load_lora"
+
+    CATEGORY = "SD Prompt Reader"
+
+    def load_lora(
+        self, model, clip, lora_name, strength_model, strength_clip, last_lora=None
+    ):
+        if strength_model == 0 and strength_clip == 0:
+            return (model, clip, lora_name)
+
+        lora_path = folder_paths.get_full_path("loras", lora_name)
+        lora = None
+        if self.loaded_lora is not None:
+            if self.loaded_lora[0] == lora_path:
+                lora = self.loaded_lora[1]
+            else:
+                temp = self.loaded_lora
+                self.loaded_lora = None
+                del temp
+
+        if lora is None:
+            lora = comfy.utils.load_torch_file(lora_path, safe_load=True)
+            self.loaded_lora = (lora_path, lora)
+
+        model_lora, clip_lora = comfy.sd.load_lora_for_models(
+            model, clip, lora, strength_model, strength_clip
+        )
+
+        next_lora = last_lora + [lora_name] if last_lora else [lora_name]
+
+        return (model_lora, clip_lora, next_lora)
+
+
+class SDLoraSelector:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "lora_name": (folder_paths.get_filename_list("loras"),),
+            },
+            "optional": {
+                "last_lora": (any_type,),
+            },
+        }
+
+    RETURN_TYPES = (folder_paths.get_filename_list("loras"), any_type)
+    RETURN_NAMES = ("LORA_NAME", "NEXT_LORA")
+    FUNCTION = "get_name"
+
+    CATEGORY = "SD Prompt Reader"
+
+    def get_name(self, lora_name, last_lora=None):
+        next_lora = last_lora + [lora_name] if last_lora else [lora_name]
+        return (lora_name, next_lora)
+
+
 NODE_CLASS_MAPPINGS = {
     "SDPromptReader": SDPromptReader,
     "SDPromptSaver": SDPromptSaver,
@@ -1079,6 +1189,8 @@ NODE_CLASS_MAPPINGS = {
     "SDTypeConverter": SDTypeConverter,
     "SDBatchLoader": SDBatchLoader,
     "SDParameterExtractor": SDParameterExtractor,
+    "SDLoraLoader": SDLoraLoader,
+    "SDLoraSelector": SDLoraSelector,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -1089,4 +1201,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SDTypeConverter": "SD Type Converter",
     "SDBatchLoader": "SD Batch Loader",
     "SDParameterExtractor": "SD Parameter Extractor",
+    "SDLoraLoader": "SD Lora Loader",
+    "SDLoraSelector": "SD Lora Selector",
 }
