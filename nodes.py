@@ -159,18 +159,21 @@ class SDPromptReader:
                 raise ValueError(MESSAGE["format_error"][1])
 
             seed = int(
-                self.param_parser(image_data.parameter.get("seed"), parameter_index)
+                self.param_parser(image_data.parameter.get("seed", 0), parameter_index)
                 or 0
             )
             steps = int(
-                self.param_parser(image_data.parameter.get("steps"), parameter_index)
+                self.param_parser(image_data.parameter.get("steps", 0), parameter_index)
                 or 0
             )
             cfg = float(
-                self.param_parser(image_data.parameter.get("cfg"), parameter_index) or 0
+                self.param_parser(image_data.parameter.get("cfg", 0), parameter_index)
+                or 0
             )
             model = str(
-                self.param_parser(image_data.parameter.get("model"), parameter_index)
+                self.param_parser(
+                    image_data.parameter.get("model", ""), parameter_index
+                )
                 or ""
             )
             width = int(image_data.width or 0)
@@ -204,8 +207,12 @@ class SDPromptReader:
 
     @staticmethod
     def param_parser(data: str, index: int):
-        data_list = data.strip("()").split(",")
-        return data_list[0] if len(data_list) == 1 else data_list[index]
+        try:
+            data_list = data.strip("()").split(",")
+        except AttributeError:
+            return None
+        else:
+            return data_list[0] if len(data_list) == 1 else data_list[index]
 
     @staticmethod
     def search_model(model: str):
