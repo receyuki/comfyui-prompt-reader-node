@@ -251,6 +251,9 @@ class SDPromptSaver:
     vae_hash_dict = {}
     lora_hash_dict = {}
     ti_hash_dict = {}
+    ti_paths = []
+    ti_names = []
+    ti_stems = []
 
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
@@ -259,6 +262,10 @@ class SDPromptSaver:
 
     @classmethod
     def INPUT_TYPES(s):
+        for file in folder_paths.get_filename_list("embeddings"):
+            SDPromptSaver.ti_paths.append(file)
+            SDPromptSaver.ti_names.append(Path(file).name)
+            SDPromptSaver.ti_stems.append(Path(file).stem)
         return {
             "required": {
                 "images": ("IMAGE",),
@@ -422,6 +429,8 @@ class SDPromptSaver:
             vae_str = ""
             lora_hash_dict = {}
             lora_hash_str = ""
+            ti_hash_dict = {}
+            ti_hash_str = ""
 
             if vae_name:
                 vae_str = f"VAE: {Path(vae_name).stem}, "
@@ -449,6 +458,28 @@ class SDPromptSaver:
                     lora_hash_items = [f"{k}: {v}" for k, v in lora_hash_dict.items()]
                     lora_hash_str_value = ", ".join(lora_hash_items)
                     lora_hash_str = f'Lora hashes: "{lora_hash_str_value}", '
+
+                ti_pattern = (
+                    r"(?:\(|\s|,)?"  # match an optional opening parenthesis, space, or comma
+                    r"embedding:"  # match the literal text "embedding:"
+                    r"([^\s:,()]+)"  # match a string that does not contain spaces, colons, commas, or parentheses
+                    r"(?:\.(?:pt|safetensors))?"  # optionally match a file extension ".pt" or ".safetensors"
+                    r"(?::\d+(?:\.\d+)?)?"  # optionally match a colon followed by numbers,
+                    # with an optional decimal part (e.g., ":1" or ":1.0")
+                    r"(?:\)|,|\s)?"  # optionally match a closing parenthesis, comma, or space
+                )
+                ti_names = re.findall(ti_pattern, f"{positive}/n{negative}")
+                ti_names_with_ext = [self.search_ti(name) for name in ti_names]
+
+                for name in ti_names_with_ext:
+                    if name:
+                        ti_hash = self.calculate_hash(name, "ti")
+                        ti_hash_dict[Path(name).stem] = ti_hash
+                        hashes[f"embed:{Path(name).stem}"] = ti_hash
+                ti_hash_items = [f"{k}: {v}" for k, v in ti_hash_dict.items()]
+                ti_hash_str_value = ", ".join(ti_hash_items)
+                ti_hash_str = f'TI hashes: "{ti_hash_str_value}", '
+
             hashes_str = (
                 f", Hashes: {json.dumps(hashes)}" if (hashes and resource_hash) else ""
             )
@@ -466,6 +497,7 @@ class SDPromptSaver:
                 f"{vae_hash_str}"
                 f"{vae_str}"
                 f"{lora_hash_str}"
+                f"{ti_hash_str}"
                 f"Version: ComfyUI"
                 f"{hashes_str}"
                 f"{extra_info_real}"
@@ -533,6 +565,9 @@ class SDPromptSaver:
             case "lora":
                 hash_dict = SDPromptSaver.lora_hash_dict
                 file_name = folder_paths.get_full_path("loras", name)
+            case "ti":
+                hash_dict = SDPromptSaver.ti_hash_dict
+                file_name = folder_paths.get_full_path("embeddings", name)
             case _:
                 return ""
 
@@ -584,6 +619,19 @@ class SDPromptSaver:
             file = Path(new_stem).with_suffix(f".{extension}")
 
         return file
+
+    @staticmethod
+    def search_ti(ti: str):
+        if not ti or ti in SDPromptSaver.ti_paths:
+            return ti
+
+        if ti in SDPromptSaver.ti_stems:
+            return SDPromptSaver.ti_paths[SDPromptSaver.ti_stems.index(ti)]
+
+        if ti in SDPromptSaver.ti_names:
+            return SDPromptSaver.ti_paths[SDPromptSaver.ti_names.index(ti)]
+
+        return ""
 
 
 class SDParameterGenerator:
