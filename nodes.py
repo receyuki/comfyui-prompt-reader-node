@@ -437,9 +437,10 @@ class SDPromptSaver:
 
             hashes = {}
             if calculate_hash:
-                model_hash = self.calculate_hash(model_name_real, "model")
-                model_hash_str = f"Model hash: {model_hash}, "
-                hashes["model"] = model_hash
+                if model_name_real:
+                    model_hash = self.calculate_hash(model_name_real, "model")
+                    model_hash_str = f"Model hash: {model_hash}, "
+                    hashes["model"] = model_hash
 
                 if vae_name:
                     vae_hash = self.calculate_hash(vae_name, "vae")
