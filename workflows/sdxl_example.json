@@ -1,0 +1,1943 @@
+{
+  "last_node_id": 22,
+  "last_link_id": 101,
+  "nodes": [
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1780,
+        130
+      ],
+      "size": {
+        "0": 320,
+        "1": 50
+      },
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 52
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 59,
+          "slot_index": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            14
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 10,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        100,
+        130
+      ],
+      "size": {
+        "0": 315,
+        "1": 98
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            41
+          ],
+          "shape": 3
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            57,
+            58
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            59
+          ],
+          "shape": 3,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "widgets_values": [
+        "sd_xl_refiner_1.0_0.9vae.safetensors"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "CLIPTextEncodeSDXL",
+      "pos": [
+        520,
+        830
+      ],
+      "size": {
+        "0": 320,
+        "1": 202
+      },
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 55
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 66,
+          "widget": {
+            "name": "width"
+          },
+          "slot_index": 1
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 67,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "target_width",
+          "type": "INT",
+          "link": 68,
+          "widget": {
+            "name": "target_width"
+          },
+          "slot_index": 3
+        },
+        {
+          "name": "target_height",
+          "type": "INT",
+          "link": 69,
+          "widget": {
+            "name": "target_height"
+          }
+        },
+        {
+          "name": "text_g",
+          "type": "STRING",
+          "link": 70,
+          "widget": {
+            "name": "text_g"
+          },
+          "slot_index": 5
+        },
+        {
+          "name": "text_l",
+          "type": "STRING",
+          "link": 71,
+          "widget": {
+            "name": "text_l"
+          },
+          "slot_index": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            86
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "CLIPTextEncodeSDXL Positive",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeSDXL"
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        0,
+        0,
+        1024,
+        1024,
+        "CLIP_G",
+        "CLIP_L"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "CLIPTextEncodeSDXL",
+      "pos": [
+        520,
+        498
+      ],
+      "size": {
+        "0": 320,
+        "1": 202
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 56,
+          "slot_index": 0
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 62,
+          "widget": {
+            "name": "width"
+          },
+          "slot_index": 3
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 63,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "target_width",
+          "type": "INT",
+          "link": 64,
+          "widget": {
+            "name": "target_width"
+          },
+          "slot_index": 5
+        },
+        {
+          "name": "target_height",
+          "type": "INT",
+          "link": 65,
+          "widget": {
+            "name": "target_height"
+          }
+        },
+        {
+          "name": "text_g",
+          "type": "STRING",
+          "link": 75,
+          "widget": {
+            "name": "text_g"
+          },
+          "slot_index": 5
+        },
+        {
+          "name": "text_l",
+          "type": "STRING",
+          "link": 76,
+          "widget": {
+            "name": "text_l"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            54
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "CLIPTextEncodeSDXL Negative",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeSDXL"
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        0,
+        0,
+        1024,
+        1024,
+        "CLIP_G",
+        "CLIP_L"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "CLIPTextEncodeSDXLRefiner",
+      "pos": [
+        520,
+        1162
+      ],
+      "size": {
+        "0": 320,
+        "1": 114
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 58
+        },
+        {
+          "name": "ascore",
+          "type": "FLOAT",
+          "link": 80,
+          "widget": {
+            "name": "ascore"
+          }
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 81,
+          "widget": {
+            "name": "width"
+          },
+          "slot_index": 2
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 82,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 77,
+          "widget": {
+            "name": "text"
+          },
+          "slot_index": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            87
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "CLIPTextEncodeSDXLRefiner Negative",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeSDXLRefiner"
+      },
+      "widgets_values": [
+        6,
+        1024,
+        1024,
+        ""
+      ]
+    },
+    {
+      "id": 12,
+      "type": "CLIPTextEncodeSDXLRefiner",
+      "pos": [
+        520,
+        1406
+      ],
+      "size": {
+        "0": 320,
+        "1": 114
+      },
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 57
+        },
+        {
+          "name": "ascore",
+          "type": "FLOAT",
+          "link": 79,
+          "widget": {
+            "name": "ascore"
+          },
+          "slot_index": 1
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 83,
+          "widget": {
+            "name": "width"
+          },
+          "slot_index": 2
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 84,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 78,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            46
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "CLIPTextEncodeSDXLRefiner Positive",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeSDXLRefiner"
+      },
+      "widgets_values": [
+        6,
+        1024,
+        1024,
+        ""
+      ]
+    },
+    {
+      "id": 18,
+      "type": "PrimitiveNode",
+      "pos": [
+        100,
+        358
+      ],
+      "size": {
+        "0": 320,
+        "1": 80
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            75
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "text_g"
+          }
+        }
+      ],
+      "title": "Negative Clip G",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        "CLIP_G"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "PrimitiveNode",
+      "pos": [
+        100,
+        568
+      ],
+      "size": {
+        "0": 320,
+        "1": 80
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            76,
+            91
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "text_l"
+          }
+        }
+      ],
+      "title": "Negative Clip L",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        "CLIP_L"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "SDPromptMerger",
+      "pos": [
+        520,
+        314
+      ],
+      "size": {
+        "0": 320,
+        "1": 54
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_g",
+          "type": "STRING",
+          "link": 88,
+          "widget": {
+            "name": "text_g"
+          },
+          "slot_index": 0
+        },
+        {
+          "name": "text_l",
+          "type": "STRING",
+          "link": 89,
+          "widget": {
+            "name": "text_l"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            94
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDPromptMerger"
+      },
+      "widgets_values": [
+        "CLIP_G",
+        "CLIP_L"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "SDPromptMerger",
+      "pos": [
+        520,
+        130
+      ],
+      "size": {
+        "0": 320,
+        "1": 54
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_g",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text_g"
+          }
+        },
+        {
+          "name": "text_l",
+          "type": "STRING",
+          "link": 91,
+          "widget": {
+            "name": "text_l"
+          },
+          "slot_index": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            93
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDPromptMerger"
+      },
+      "widgets_values": [
+        "CLIP_G",
+        "CLIP_L"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "EmptyLatentImage",
+      "pos": [
+        520,
+        1650
+      ],
+      "size": {
+        "0": 320,
+        "1": 74
+      },
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 99,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 100,
+          "widget": {
+            "name": "height"
+          },
+          "slot_index": 1
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "link": 4,
+          "widget": {
+            "name": "batch_size"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            10
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyLatentImage"
+      },
+      "widgets_values": [
+        512,
+        512,
+        1
+      ]
+    },
+    {
+      "id": 4,
+      "type": "KSamplerAdvanced",
+      "pos": [
+        940,
+        130
+      ],
+      "size": [
+        320,
+        290
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 9
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 86,
+          "slot_index": 1
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 54
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 10
+        },
+        {
+          "name": "noise_seed",
+          "type": "INT",
+          "link": 11,
+          "widget": {
+            "name": "noise_seed"
+          },
+          "slot_index": 4
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "link": 42,
+          "widget": {
+            "name": "steps"
+          }
+        },
+        {
+          "name": "cfg",
+          "type": "FLOAT",
+          "link": 101,
+          "widget": {
+            "name": "cfg"
+          },
+          "slot_index": 6
+        },
+        {
+          "name": "sampler_name",
+          "type": "COMBO",
+          "link": 17,
+          "widget": {
+            "name": "sampler_name"
+          }
+        },
+        {
+          "name": "scheduler",
+          "type": "COMBO",
+          "link": 18,
+          "widget": {
+            "name": "scheduler"
+          },
+          "slot_index": 8
+        },
+        {
+          "name": "end_at_step",
+          "type": "INT",
+          "link": 45,
+          "widget": {
+            "name": "end_at_step"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            51
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSamplerAdvanced"
+      },
+      "widgets_values": [
+        "enable",
+        667642027243430,
+        "randomize",
+        20,
+        8,
+        "euler",
+        "normal",
+        0,
+        10000,
+        "enable"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "KSamplerAdvanced",
+      "pos": [
+        1360,
+        130
+      ],
+      "size": [
+        320,
+        310
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 41,
+          "slot_index": 0
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 46
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 87
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 51
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "link": 43,
+          "widget": {
+            "name": "steps"
+          },
+          "slot_index": 4
+        },
+        {
+          "name": "cfg",
+          "type": "FLOAT",
+          "link": 48,
+          "widget": {
+            "name": "cfg"
+          },
+          "slot_index": 5
+        },
+        {
+          "name": "sampler_name",
+          "type": "COMBO",
+          "link": 49,
+          "widget": {
+            "name": "sampler_name"
+          },
+          "slot_index": 6
+        },
+        {
+          "name": "scheduler",
+          "type": "COMBO",
+          "link": 50,
+          "widget": {
+            "name": "scheduler"
+          }
+        },
+        {
+          "name": "start_at_step",
+          "type": "INT",
+          "link": 44,
+          "widget": {
+            "name": "start_at_step"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            52
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSamplerAdvanced"
+      },
+      "widgets_values": [
+        "enable",
+        996620651190540,
+        "randomize",
+        20,
+        8,
+        "euler",
+        "normal",
+        0,
+        10000,
+        "disable"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "SDPromptSaver",
+      "pos": [
+        2200,
+        130
+      ],
+      "size": [
+        320,
+        560
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 14
+        },
+        {
+          "name": "lora_name",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "model_name",
+          "type": "COMBO",
+          "link": 39,
+          "widget": {
+            "name": "model_name"
+          },
+          "slot_index": 2
+        },
+        {
+          "name": "vae_name",
+          "type": "COMBO",
+          "link": 40,
+          "widget": {
+            "name": "vae_name"
+          }
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "link": 30,
+          "widget": {
+            "name": "seed"
+          },
+          "slot_index": 4
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "link": 97,
+          "widget": {
+            "name": "steps"
+          },
+          "slot_index": 5
+        },
+        {
+          "name": "cfg",
+          "type": "FLOAT",
+          "link": 98,
+          "widget": {
+            "name": "cfg"
+          },
+          "slot_index": 6
+        },
+        {
+          "name": "sampler_name",
+          "type": "COMBO",
+          "link": 28,
+          "widget": {
+            "name": "sampler_name"
+          },
+          "slot_index": 7
+        },
+        {
+          "name": "scheduler",
+          "type": "COMBO",
+          "link": 29,
+          "widget": {
+            "name": "scheduler"
+          }
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 95,
+          "widget": {
+            "name": "width"
+          },
+          "slot_index": 9
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 96,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 94,
+          "widget": {
+            "name": "positive"
+          }
+        },
+        {
+          "name": "negative",
+          "type": "STRING",
+          "link": 93,
+          "widget": {
+            "name": "negative"
+          },
+          "slot_index": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FILENAME",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "FILE_PATH",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "METADATA",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDPromptSaver"
+      },
+      "widgets_values": [
+        "ComfyUI_%time_%seed_%counter",
+        "%date/",
+        "CheckpointYesmix_v35.safetensors",
+        "kl-f8-anime2.ckpt",
+        660675745249894,
+        "randomize",
+        20,
+        8,
+        "euler",
+        "normal",
+        1,
+        1,
+        "",
+        "",
+        "png",
+        true,
+        true,
+        true,
+        100,
+        "%Y-%m-%d",
+        "%H%M%S",
+        false,
+        "SD Prompt Reader Node Example Image"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "PrimitiveNode",
+      "pos": [
+        100,
+        778
+      ],
+      "size": {
+        "0": 320,
+        "1": 80
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            70,
+            88
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "text_g"
+          }
+        }
+      ],
+      "title": "Positive Clip G",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        "CLIP_G"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "PrimitiveNode",
+      "pos": [
+        100,
+        988
+      ],
+      "size": {
+        "0": 320,
+        "1": 80
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            71,
+            89
+          ],
+          "widget": {
+            "name": "text_l"
+          },
+          "slot_index": 0
+        }
+      ],
+      "title": "Positive Clip L",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        "CLIP_L"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "PrimitiveNode",
+      "pos": [
+        100,
+        1198
+      ],
+      "size": {
+        "0": 320,
+        "1": 80
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            77
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "title": "Refiner Negative",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 20,
+      "type": "PrimitiveNode",
+      "pos": [
+        100,
+        1408
+      ],
+      "size": {
+        "0": 320,
+        "1": 80
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            78
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "title": "Refiner Positive",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 2,
+      "type": "SDParameterGenerator",
+      "pos": [
+        100,
+        1618
+      ],
+      "size": {
+        "0": 320,
+        "1": 902
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MODEL_NAME",
+          "type": "COMBO",
+          "links": [
+            39
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "VAE_NAME",
+          "type": "COMBO",
+          "links": [
+            40
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            9
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            55,
+            56
+          ],
+          "shape": 3,
+          "slot_index": 3
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [],
+          "shape": 3
+        },
+        {
+          "name": "SEED",
+          "type": "INT",
+          "links": [
+            11,
+            30
+          ],
+          "shape": 3
+        },
+        {
+          "name": "STEPS",
+          "type": "INT",
+          "links": [
+            42,
+            43,
+            97
+          ],
+          "shape": 3,
+          "slot_index": 6
+        },
+        {
+          "name": "REFINER_START_STEP",
+          "type": "INT",
+          "links": [
+            44,
+            45
+          ],
+          "shape": 3,
+          "slot_index": 7
+        },
+        {
+          "name": "CFG",
+          "type": "FLOAT",
+          "links": [
+            48,
+            98,
+            101
+          ],
+          "shape": 3,
+          "slot_index": 8
+        },
+        {
+          "name": "SAMPLER_NAME",
+          "type": "COMBO",
+          "links": [
+            17,
+            28,
+            49
+          ],
+          "shape": 3,
+          "slot_index": 9
+        },
+        {
+          "name": "SCHEDULER",
+          "type": "COMBO",
+          "links": [
+            18,
+            29,
+            50
+          ],
+          "shape": 3,
+          "slot_index": 10
+        },
+        {
+          "name": "POSITIVE_ASCORE",
+          "type": "FLOAT",
+          "links": [
+            79
+          ],
+          "shape": 3
+        },
+        {
+          "name": "NEGATIVE_ASCORE",
+          "type": "FLOAT",
+          "links": [
+            80
+          ],
+          "shape": 3,
+          "slot_index": 12
+        },
+        {
+          "name": "WIDTH",
+          "type": "INT",
+          "links": [
+            62,
+            64,
+            66,
+            68,
+            81,
+            83,
+            95,
+            99
+          ],
+          "shape": 3,
+          "slot_index": 13
+        },
+        {
+          "name": "HEIGHT",
+          "type": "INT",
+          "links": [
+            63,
+            65,
+            67,
+            69,
+            82,
+            84,
+            96,
+            100
+          ],
+          "shape": 3,
+          "slot_index": 14
+        },
+        {
+          "name": "BATCH_SIZE",
+          "type": "INT",
+          "links": [
+            4
+          ],
+          "shape": 3,
+          "slot_index": 15
+        },
+        {
+          "name": "PARAMETERS",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDParameterGenerator"
+      },
+      "widgets_values": [
+        "sd_xl_base_1.0_0.9vae.safetensors",
+        "baked VAE",
+        "SDXL 1024px",
+        "none",
+        40346610113952,
+        50,
+        0.8,
+        8,
+        "dpmpp_2m",
+        "karras",
+        6,
+        6,
+        "1:1 - 1024x1024",
+        1024,
+        1024,
+        1,
+        "Total steps: 50,\nRefiner start at step: 40 (80%)",
+        "Optimal resolution for SDXL 1024px model\nwith aspect ratio 1:1: 1024 x 1024",
+        null,
+        "Total steps: 30,\nRefiner off",
+        "Optimal resolution for SDv1 512px model\nwith aspect ratio 1:1: 512 x 512"
+      ]
+    }
+  ],
+  "links": [
+    [
+      4,
+      2,
+      15,
+      5,
+      2,
+      "INT"
+    ],
+    [
+      9,
+      2,
+      2,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      10,
+      5,
+      0,
+      4,
+      3,
+      "LATENT"
+    ],
+    [
+      11,
+      2,
+      5,
+      4,
+      4,
+      "INT"
+    ],
+    [
+      14,
+      8,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      17,
+      2,
+      9,
+      4,
+      7,
+      "COMBO"
+    ],
+    [
+      18,
+      2,
+      10,
+      4,
+      8,
+      "COMBO"
+    ],
+    [
+      28,
+      2,
+      9,
+      3,
+      7,
+      "COMBO"
+    ],
+    [
+      29,
+      2,
+      10,
+      3,
+      8,
+      "COMBO"
+    ],
+    [
+      30,
+      2,
+      5,
+      3,
+      4,
+      "INT"
+    ],
+    [
+      39,
+      2,
+      0,
+      3,
+      2,
+      "COMBO"
+    ],
+    [
+      40,
+      2,
+      1,
+      3,
+      3,
+      "COMBO"
+    ],
+    [
+      41,
+      10,
+      0,
+      9,
+      0,
+      "MODEL"
+    ],
+    [
+      42,
+      2,
+      6,
+      4,
+      5,
+      "INT"
+    ],
+    [
+      43,
+      2,
+      6,
+      9,
+      4,
+      "INT"
+    ],
+    [
+      44,
+      2,
+      7,
+      9,
+      8,
+      "INT"
+    ],
+    [
+      45,
+      2,
+      7,
+      4,
+      9,
+      "INT"
+    ],
+    [
+      46,
+      12,
+      0,
+      9,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      48,
+      2,
+      8,
+      9,
+      5,
+      "FLOAT"
+    ],
+    [
+      49,
+      2,
+      9,
+      9,
+      6,
+      "COMBO"
+    ],
+    [
+      50,
+      2,
+      10,
+      9,
+      7,
+      "COMBO"
+    ],
+    [
+      51,
+      4,
+      0,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      52,
+      9,
+      0,
+      8,
+      0,
+      "LATENT"
+    ],
+    [
+      54,
+      13,
+      0,
+      4,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      55,
+      2,
+      3,
+      11,
+      0,
+      "CLIP"
+    ],
+    [
+      56,
+      2,
+      3,
+      13,
+      0,
+      "CLIP"
+    ],
+    [
+      57,
+      10,
+      1,
+      12,
+      0,
+      "CLIP"
+    ],
+    [
+      58,
+      10,
+      1,
+      14,
+      0,
+      "CLIP"
+    ],
+    [
+      59,
+      10,
+      2,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      62,
+      2,
+      13,
+      13,
+      1,
+      "INT"
+    ],
+    [
+      63,
+      2,
+      14,
+      13,
+      2,
+      "INT"
+    ],
+    [
+      64,
+      2,
+      13,
+      13,
+      3,
+      "INT"
+    ],
+    [
+      65,
+      2,
+      14,
+      13,
+      4,
+      "INT"
+    ],
+    [
+      66,
+      2,
+      13,
+      11,
+      1,
+      "INT"
+    ],
+    [
+      67,
+      2,
+      14,
+      11,
+      2,
+      "INT"
+    ],
+    [
+      68,
+      2,
+      13,
+      11,
+      3,
+      "INT"
+    ],
+    [
+      69,
+      2,
+      14,
+      11,
+      4,
+      "INT"
+    ],
+    [
+      70,
+      16,
+      0,
+      11,
+      5,
+      "STRING"
+    ],
+    [
+      71,
+      15,
+      0,
+      11,
+      6,
+      "STRING"
+    ],
+    [
+      75,
+      18,
+      0,
+      13,
+      5,
+      "STRING"
+    ],
+    [
+      76,
+      17,
+      0,
+      13,
+      6,
+      "STRING"
+    ],
+    [
+      77,
+      19,
+      0,
+      14,
+      4,
+      "STRING"
+    ],
+    [
+      78,
+      20,
+      0,
+      12,
+      4,
+      "STRING"
+    ],
+    [
+      79,
+      2,
+      11,
+      12,
+      1,
+      "FLOAT"
+    ],
+    [
+      80,
+      2,
+      12,
+      14,
+      1,
+      "FLOAT"
+    ],
+    [
+      81,
+      2,
+      13,
+      14,
+      2,
+      "INT"
+    ],
+    [
+      82,
+      2,
+      14,
+      14,
+      3,
+      "INT"
+    ],
+    [
+      83,
+      2,
+      13,
+      12,
+      2,
+      "INT"
+    ],
+    [
+      84,
+      2,
+      14,
+      12,
+      3,
+      "INT"
+    ],
+    [
+      86,
+      11,
+      0,
+      4,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      87,
+      14,
+      0,
+      9,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      88,
+      16,
+      0,
+      21,
+      0,
+      "STRING"
+    ],
+    [
+      89,
+      15,
+      0,
+      21,
+      1,
+      "STRING"
+    ],
+    [
+      91,
+      17,
+      0,
+      22,
+      1,
+      "STRING"
+    ],
+    [
+      93,
+      22,
+      0,
+      3,
+      12,
+      "STRING"
+    ],
+    [
+      94,
+      21,
+      0,
+      3,
+      11,
+      "STRING"
+    ],
+    [
+      95,
+      2,
+      13,
+      3,
+      9,
+      "INT"
+    ],
+    [
+      96,
+      2,
+      14,
+      3,
+      10,
+      "INT"
+    ],
+    [
+      97,
+      2,
+      6,
+      3,
+      5,
+      "INT"
+    ],
+    [
+      98,
+      2,
+      8,
+      3,
+      6,
+      "FLOAT"
+    ],
+    [
+      99,
+      2,
+      13,
+      5,
+      0,
+      "INT"
+    ],
+    [
+      100,
+      2,
+      14,
+      5,
+      1,
+      "INT"
+    ],
+    [
+      101,
+      2,
+      8,
+      4,
+      6,
+      "FLOAT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
