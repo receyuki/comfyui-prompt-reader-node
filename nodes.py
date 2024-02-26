@@ -807,9 +807,6 @@ class SDParameterGenerator:
         output_vae=True,
         output_clip=True,
     ):
-        if ckpt_name not in SDParameterGenerator.ckpt_list:
-            raise FileNotFoundError(f"Invalid ckpt_name: {ckpt_name}")
-
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
         if config_name != "none":
             config_path = folder_paths.get_full_path("configs", config_name)
