@@ -552,7 +552,14 @@ class SDPromptSaver:
             output_to_terminal("Saved file: " + str(file))
             comments.append(comment)
 
-        return {"ui": {"images": results}, "result": (files, file_paths, comments)}
+        return {
+            "ui": {"images": results},
+            "result": (
+                self.unpack_singleton(files),
+                self.unpack_singleton(file_paths),
+                self.unpack_singleton(comments),
+            ),
+        }
 
     @staticmethod
     def calculate_hash(name, hash_type):
@@ -633,6 +640,10 @@ class SDPromptSaver:
             return SDPromptSaver.ti_paths[SDPromptSaver.ti_names.index(ti)]
 
         return ""
+
+    @staticmethod
+    def unpack_singleton(arr: list):
+        return arr[0] if len(arr) == 1 else arr
 
 
 class SDParameterGenerator:
