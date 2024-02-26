@@ -408,7 +408,7 @@ class SDPromptSaver:
                 "%steps": steps,
                 "%cfg": cfg,
                 "%extension": extension,
-                "%model": model_name_real,
+                "%model": Path(model_name_real).stem,
                 "%sampler": sampler_name_real,
                 "%scheduler": scheduler_real,
                 "%quality": jpg_webp_quality,
