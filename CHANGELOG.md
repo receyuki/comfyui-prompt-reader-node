@@ -1,4 +1,16 @@
 # Change Log
+## v1.3.1
+> Starting from v1.3, to support auto-detection on Civitai, `calculate_model_hash` will be renamed as 
+> `calculate_hash` and it will be enabled by default. Due to the addition of temporary storage of the model hash values,
+> the first image generated after switching to the new model will take more time to calculate the hash value, 
+> but it will not affect the generation speed afterwards until the server is restarted.
+
+- Add user-friendly warnings and remove the exception raised during the reading of metadata #58 #63
+- Add JPEG to the image extension list
+- Fix the issue where the `Prompt Saver` node cannot consume filename from another `Prompt Saver` node #62
+- Fix the `Prompt Saver` node freezes workflow when name includes `%model` #61
+- Remove ckpt validation of the `Prompt Reader` node #59
+
 ## v1.3.0
 > Starting from this version, to support auto-detection on Civitai, `calculate_model_hash` will be renamed as 
 > `calculate_hash` and it will be enabled by default. Due to the addition of temporary storage of the model hash values,

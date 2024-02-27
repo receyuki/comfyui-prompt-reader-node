@@ -132,6 +132,8 @@ the `Prompt Saver` Node and `KSampler` Node.
 <details>
     <summary><b>More Information</b></summary>
 
+#### Image Format
+- Only PNG format supports embedding both metadata and workflow at the same time. Other formats can only embed metadata.
 #### Duplicate Filename
 - When the filename already exists, an index will be added at the end of the filename, 
 e.g. `file.png, file_1.png, file_2.png`.
