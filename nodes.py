@@ -30,7 +30,6 @@ import folder_paths
 
 from .stable_diffusion_prompt_reader.sd_prompt_reader.constants import (
     SUPPORTED_FORMATS,
-    MESSAGE,
 )
 from .stable_diffusion_prompt_reader.sd_prompt_reader.image_data_reader import (
     ImageDataReader,
@@ -44,6 +43,15 @@ from .stable_diffusion_prompt_reader.sd_prompt_reader.__version__ import (
 BLUE = "\033[1;34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
+
+ERROR_MESSAGE = {
+    "format_error": "No data detected or unsupported format. "
+    "Please see the README for more details.\n"
+    "https://github.com/receyuki/comfyui-prompt-reader-node#supported-formats",
+    "complex_workflow": "The workflow is overly complex, or unsupported custom nodes have been used. "
+    "Please see the README for more details.\n"
+    "https://github.com/receyuki/comfyui-prompt-reader-node#prompt-reader-node",
+}
 
 
 def output_to_terminal(text: str):
@@ -148,15 +156,30 @@ class SDPromptReader:
 
         file_path = Path(image_path)
 
-        if file_path.suffix not in SUPPORTED_FORMATS:
-            output_to_terminal(MESSAGE["suffix_error"][1])
-            raise ValueError(MESSAGE["suffix_error"][1])
-
         with open(file_path, "rb") as f:
-            image_data = ImageDataReader(f)
+            try:
+                image_data = ImageDataReader(f)
+            except:
+                output_to_terminal(ERROR_MESSAGE["complex_workflow"])
+                return self.error_output(
+                    error_message=ERROR_MESSAGE["complex_workflow"],
+                    image=image,
+                    mask=mask,
+                    width=i.width,
+                    height=i.height,
+                    filename=file_path.stem,
+                )
+
             if not image_data.tool:
-                output_to_terminal(MESSAGE["format_error"][1])
-                raise ValueError(MESSAGE["format_error"][1])
+                output_to_terminal(ERROR_MESSAGE["format_error"])
+                return self.error_output(
+                    error_message=ERROR_MESSAGE["format_error"],
+                    image=image,
+                    mask=mask,
+                    width=i.width,
+                    height=i.height,
+                    filename=file_path.stem,
+                )
 
             seed = int(
                 self.param_parser(image_data.parameter.get("seed", 0), parameter_index)
@@ -234,6 +257,28 @@ class SDPromptReader:
             ]
 
         return model
+
+    @staticmethod
+    def error_output(
+        error_message, image=None, mask=None, width=0, height=0, filename=""
+    ):
+        return {
+            "ui": {"text": ("", "", error_message)},
+            "result": (
+                image,
+                mask,
+                "",
+                "",
+                0,
+                0,
+                0.0,
+                width,
+                height,
+                "",
+                filename,
+                "",
+            ),
+        }
 
     @classmethod
     def IS_CHANGED(s, image, parameter_index):
