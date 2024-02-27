@@ -361,7 +361,7 @@ class SDPromptSaver:
                 ),
                 "positive": ("STRING", {"default": "", "multiline": True}),
                 "negative": ("STRING", {"default": "", "multiline": True}),
-                "extension": (["png", "jpg", "webp"],),
+                "extension": (["png", "jpg", "jpeg", "webp"],),
                 "calculate_hash": ("BOOLEAN", {"default": True}),
                 "resource_hash": ("BOOLEAN", {"default": True}),
                 "lossless_webp": ("BOOLEAN", {"default": True}),
