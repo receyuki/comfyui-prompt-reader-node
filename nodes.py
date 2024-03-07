@@ -141,6 +141,8 @@ class SDPromptReader:
     def load_image(self, image, parameter_index):
         if image in SDPromptReader.files:
             image_path = folder_paths.get_annotated_filepath(image)
+        elif image.startswith("pasted/"):
+            image_path = folder_paths.get_annotated_filepath(image)
         else:
             image_path = image
         i = Image.open(image_path)
@@ -289,6 +291,10 @@ class SDPromptReader:
         with open(Path(image_path), "rb") as f:
             image_data = ImageDataReader(f)
         return image_data.props
+
+    @classmethod
+    def VALIDATE_INPUTS(s, image):
+        return True
 
 
 class SDPromptSaver:
