@@ -159,9 +159,8 @@ class SDPromptReader:
         file_path = Path(image_path)
 
         with open(file_path, "rb") as f:
-            try:
-                image_data = ImageDataReader(f)
-            except:
+            image_data = ImageDataReader(f)
+            if image_data.status.name == "COMFYUI_ERROR":
                 output_to_terminal(ERROR_MESSAGE["complex_workflow"])
                 return self.error_output(
                     error_message=ERROR_MESSAGE["complex_workflow"],
@@ -171,8 +170,7 @@ class SDPromptReader:
                     height=i.height,
                     filename=file_path.stem,
                 )
-
-            if not image_data.tool:
+            elif image_data.status.name in ["FORMAT_ERROR", "UNREAD"]:
                 output_to_terminal(ERROR_MESSAGE["format_error"])
                 return self.error_output(
                     error_message=ERROR_MESSAGE["format_error"],
