@@ -456,6 +456,8 @@ class SDPromptSaver:
                 "%seed": seed,
                 "%steps": steps,
                 "%cfg": cfg,
+                "%width": width,
+                "%height": height,
                 "%extension": extension,
                 "%model": Path(model_name_real).stem,
                 "%sampler": sampler_name_real,
