@@ -28,22 +28,27 @@ additional metadata to ensure compatibility with metadata detection on websites 
 
 
 ## Supported Formats
-|                                                                          | PNG | JPEG | WEBP | TXT* |
-|--------------------------------------------------------------------------|:---:|:----:|:----:|:----:|
-| [A1111's webUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) |  ✅  |  ✅   |  ✅   |  ✅   |
-| [Easy Diffusion](https://github.com/easydiffusion/easydiffusion)         |  ✅  |  ✅   |  ✅   |      |
-| [StableSwarmUI](https://github.com/Stability-AI/StableSwarmUI)*          |  ✅  |  ✅   |      |      |
-| [Fooocus-MRE](https://github.com/MoonRide303/Fooocus-MRE)*               |  ✅  |  ✅   |      |      |
-| [InvokeAI](https://github.com/invoke-ai/InvokeAI)                        |  ✅  |      |      |      |
-| [ComfyUI](https://github.com/comfyanonymous/ComfyUI)*                    |  ✅  |      |      |      |
-| [NovelAI](https://novelai.net/)                                          |  ✅  |      |      |      |
-| [Draw Things](https://drawthings.ai/)                                    |  ✅  |      |      |      |
-| Naifu(4chan)                                                             |  ✅  |      |      |      |
+|                                                                                        | PNG | JPEG | WEBP | TXT* |
+|----------------------------------------------------------------------------------------|:---:|:----:|:----:|:----:|
+| [A1111's webUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)               |  ✅  |  ✅   |  ✅   |  ✅   |
+| [Easy Diffusion](https://github.com/easydiffusion/easydiffusion)                       |  ✅  |  ✅   |  ✅   |      |
+| [StableSwarmUI](https://github.com/Stability-AI/StableSwarmUI)*                        |  ✅  |  ✅   |      |      |
+| [StableSwarmUI (prior to 0.5.8-alpha)](https://github.com/Stability-AI/StableSwarmUI)* |  ✅  |  ✅   |      |      |
+| [Fooocus-MRE](https://github.com/MoonRide303/Fooocus-MRE)*                             |  ✅  |  ✅   |      |      |
+| [InvokeAI](https://github.com/invoke-ai/InvokeAI)                                      |  ✅  |      |      |      |
+| [InvokeAI (prior to 2.3.5-post.2)](https://github.com/invoke-ai/InvokeAI)              |  ✅  |      |      |      |
+| [InvokeAI (prior to 1.15)](https://github.com/invoke-ai/InvokeAI)                      |  ✅  |      |      |      |
+| [ComfyUI](https://github.com/comfyanonymous/ComfyUI)*                                  |  ✅  |      |      |      |
+| [Draw Things](https://drawthings.ai/)                                                  |  ✅  |      |      |      |
+| [NovelAI (stealth pnginfo)](https://novelai.net/)                                      |  ✅  |      |      |      |
+| [NovelAI (legacy)](https://novelai.net/)                                               |  ✅  |      |      |      |
+| Naifu(4chan)                                                                           |  ✅  |      |      |      |
 
 See [SD Prompt Reader](https://github.com/receyuki/stable-diffusion-prompt-reader#supported-formats) for details
 
 ## Installation
->While ZIP package is available, it is strongly recommended not to use it for installation.
+> [!NOTE]
+> While ZIP package is available, it is strongly recommended not to use it for installation.
 ### Install and update via [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager) (Recommended)
 Search for `SD Prompt Reader` in the ComfyUI Manager and install it.
 ### Install manually
@@ -76,9 +81,11 @@ It uses the Image Data Reader from the
 [standalone SD Prompt Reader](https://github.com/receyuki/stable-diffusion-prompt-reader), 
 allowing it to support the same formats and receive updates along with the 
 [SD Prompt Reader](https://github.com/receyuki/stable-diffusion-prompt-reader).
-- Due to custom nodes and complex workflows potentially causing issues with SD Prompt Reader's ability 
-to read image metadata correctly, it is recommended to embed the `Prompt Saver` Node within the workflow 
-to ensure maximum compatibility.
+> [!IMPORTANT]
+> Due to custom nodes and complex workflows potentially causing issues with SD Prompt Reader's ability 
+> to read image metadata correctly, it is recommended to embed the `Prompt Saver` Node within the workflow 
+> to ensure maximum compatibility.
+
 <details>
     <summary><b>More Information</b></summary>
 
@@ -122,12 +129,13 @@ e.g. `sd_xl_base` will be matched with `SDXL\sd_xl_base.safetensors`, and vice v
 - The `Prompt Saver` Node will write additional metadata in the A1111 format to the output images 
 to be compatible with any tools that support the A1111 format, 
 including SD Prompt Reader and Civitai. 
-Due to custom nodes and complex workflows potentially causing issues with SD Prompt Reader's ability 
+- Due to custom nodes and complex workflows potentially causing issues with SD Prompt Reader's ability 
 to read image metadata correctly, it's recommended to embed this node within the workflow 
-to ensure maximum compatibility.   
-- Since it's not possible to directly extract metadata from `KSampler`, it's necessary to 
-use the `Parameter Generator` Node to generate parameters and simultaneously output them to 
-the `Prompt Saver` Node and `KSampler` Node.
+to ensure maximum compatibility.
+> [!TIP]
+> Since it's not possible to directly extract metadata from `KSampler`, it's necessary to 
+> use the `Parameter Generator` Node to generate parameters and simultaneously output them to 
+> the `Prompt Saver` Node and `KSampler` Node.
 
 <details>
     <summary><b>More Information</b></summary>
@@ -177,7 +185,9 @@ from the `%counter` in the built-in `Saver` node, it will count all image files 
 - Since it's not possible to directly extract metadata from `KSampler`, it's necessary to 
 use the `Parameter Generator` Node to generate parameters and simultaneously output them to both 
 the `Prompt Saver` Node and `KSampler` Node.
-- The `Parameter Generator` Node can also be used as a control panel for complex ComfyUI workflows, just like the [AP workflow](https://perilli.com/ai/comfyui/).
+> [!TIP]
+> The `Parameter Generator` Node can also be used as a control panel for complex ComfyUI workflows, just like the [AP workflow](https://perilli.com/ai/comfyui/).
+
 <details>
     <summary><b>More Information</b></summary>
 
