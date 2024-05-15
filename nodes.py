@@ -2,7 +2,7 @@
 @author: receyuki
 @title: SD Prompt Reader
 @nickname: SD Prompt Reader
-@description: ComfyUI node version of the SD Prompt Reader
+@description: The ultimate solution for managing image metadata and multi-tool compatibility. ComfyUI node version of the SD Prompt Reader
 """
 
 
