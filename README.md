@@ -1,5 +1,5 @@
 <div align="center">
-    <img alt="icon" src="https://github.com/receyuki/stable-diffusion-prompt-reader/raw/master/sd_prompt_reader/resources/icon.png" width=20% height=20%>
+    <img alt="icon" src="https://github.com/receyuki/stable-diffusion-prompt-reader/raw/master/sd_prompt_reader/resources/icon-cube.png" width=20% height=20%>
     <h1>SD Prompt Reader Node</h1>
     <a href="https://github.com/receyuki/comfyui-prompt-reader-node/blob/master/LICENSE">
         <img alt="GitHub" src="https://img.shields.io/github/license/receyuki/comfyui-prompt-reader-node"></a>
@@ -35,13 +35,13 @@ additional metadata to ensure compatibility with metadata detection on websites 
 | [StableSwarmUI](https://github.com/Stability-AI/StableSwarmUI)*                        |  ✅  |  ✅   |      |      |
 | [StableSwarmUI (prior to 0.5.8-alpha)](https://github.com/Stability-AI/StableSwarmUI)* |  ✅  |  ✅   |      |      |
 | [Fooocus-MRE](https://github.com/MoonRide303/Fooocus-MRE)*                             |  ✅  |  ✅   |      |      |
+| [NovelAI (stealth pnginfo)](https://novelai.net/)                                      |  ✅  |      |  ✅   |      |
+| [NovelAI (legacy)](https://novelai.net/)                                               |  ✅  |      |      |      |
 | [InvokeAI](https://github.com/invoke-ai/InvokeAI)                                      |  ✅  |      |      |      |
 | [InvokeAI (prior to 2.3.5-post.2)](https://github.com/invoke-ai/InvokeAI)              |  ✅  |      |      |      |
 | [InvokeAI (prior to 1.15)](https://github.com/invoke-ai/InvokeAI)                      |  ✅  |      |      |      |
 | [ComfyUI](https://github.com/comfyanonymous/ComfyUI)*                                  |  ✅  |      |      |      |
 | [Draw Things](https://drawthings.ai/)                                                  |  ✅  |      |      |      |
-| [NovelAI (stealth pnginfo)](https://novelai.net/)                                      |  ✅  |      |      |      |
-| [NovelAI (legacy)](https://novelai.net/)                                               |  ✅  |      |      |      |
 | Naifu(4chan)                                                                           |  ✅  |      |      |      |
 
 See [SD Prompt Reader](https://github.com/receyuki/stable-diffusion-prompt-reader#supported-formats) for details
