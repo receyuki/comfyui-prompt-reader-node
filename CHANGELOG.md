@@ -1,4 +1,15 @@
 # Change Log
+## v1.3.2
+> Starting from v1.3, to support auto-detection on Civitai, `calculate_model_hash` will be renamed as 
+> `calculate_hash` and it will be enabled by default. Due to the addition of temporary storage of the model hash values,
+> the first image generated after switching to the new model will take more time to calculate the hash value, 
+> but it will not affect the generation speed afterwards until the server is restarted.
+
+- Add support for pasted images to the `Prompt Reader` node #64
+- Update core to [1.3.5](https://github.com/receyuki/stable-diffusion-prompt-reader/releases/tag/v1.3.5)
+- Update nodes.py save_images to have %width and %height #66 @COvert96
+- Update the `Prompt Reader` node to the new exception handling method
+
 ## v1.3.1
 > Starting from v1.3, to support auto-detection on Civitai, `calculate_model_hash` will be renamed as 
 > `calculate_hash` and it will be enabled by default. Due to the addition of temporary storage of the model hash values,
