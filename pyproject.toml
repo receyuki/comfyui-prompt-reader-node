@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-prompt-reader-node"
+description = "The ultimate solution for managing image metadata and multi-tool compatibility. ComfyUI node version of the SD Prompt Reader."
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["piexif"]
+
+[project.urls]
+Repository = "https://github.com/receyuki/comfyui-prompt-reader-node"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "comfyui-prompt-reader-node"
+Icon = ""
