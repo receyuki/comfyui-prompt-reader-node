@@ -12,4 +12,4 @@ Repository = "https://github.com/receyuki/comfyui-prompt-reader-node"
 [tool.comfy]
 PublisherId = "receyuki"
 DisplayName = "comfyui-prompt-reader-node"
-Icon = "images/icon-cube.png"
+Icon = "https://raw.githubusercontent.com/receyuki/comfyui-prompt-reader-node/main/images/icon-400.png"
