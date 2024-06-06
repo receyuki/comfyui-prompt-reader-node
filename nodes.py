@@ -1003,22 +1003,41 @@ class SDTypeConverter:
         return {
             "required": {},
             "optional": {
-                "any_type_input": (
-                    any_type,
+                "model_name": (
+                    folder_paths.get_filename_list("checkpoints"),
                     {"forceInput": True},
                 ),
+                "sampler_name": (
+                    comfy.samplers.KSampler.SAMPLERS,
+                    {"forceInput": True},
+                ),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS, {"forceInput": True}),
             },
         }
 
-    RETURN_TYPES = (any_type,)
+    RETURN_TYPES = (
+        "STRING",
+        "STRING",
+        "STRING",
+    )
 
-    RETURN_NAMES = ("ANY_TYPE_OUTPUT",)
+    RETURN_NAMES = (
+        "MODEL_NAME_STR",
+        "SAMPLER_NAME_STR",
+        "SCHEDULER_STR",
+    )
 
     FUNCTION = "convert_string"
     CATEGORY = "SD Prompt Reader"
 
-    def convert_string(self, any_type_input: str = ""):
-        return (any_type_input,)
+    def convert_string(
+        self, model_name: str = "", sampler_name: str = "", scheduler: str = ""
+    ):
+        return (
+            model_name,
+            sampler_name,
+            scheduler,
+        )
 
 
 class SDBatchLoader:
