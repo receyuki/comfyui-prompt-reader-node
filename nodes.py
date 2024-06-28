@@ -669,13 +669,13 @@ class SDPromptSaver:
 
     @staticmethod
     def get_unique_filename(stem: Path, extension: str, output_folder: Path):
-        file = stem.with_suffix(f".{extension}")
+        file = stem.with_suffix(f"{stem.suffix}.{extension}")
         index = 0
 
         while (output_folder / file).exists():
             index += 1
-            new_stem = f"{stem}_{index}"
-            file = Path(new_stem).with_suffix(f".{extension}")
+            new_stem = Path(f"{stem}_{index}")
+            file = new_stem.with_suffix(f"{new_stem.suffix}.{extension}")
 
         return file
 
