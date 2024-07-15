@@ -357,11 +357,11 @@ class SDPromptSaver:
                 "lora_name": any_type,
                 "width": (
                     "INT",
-                    {"default": 1, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                    {"default": 1, "min": 1, "max": MAX_RESOLUTION, "step": 1},
                 ),
                 "height": (
                     "INT",
-                    {"default": 1, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                    {"default": 1, "min": 1, "max": MAX_RESOLUTION, "step": 1},
                 ),
                 "positive": ("STRING", {"default": "", "multiline": True}),
                 "negative": ("STRING", {"default": "", "multiline": True}),
@@ -788,11 +788,11 @@ class SDParameterGenerator:
                 ),
                 "width": (
                     "INT",
-                    {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                    {"default": 512, "min": 16, "max": MAX_RESOLUTION, "step": 8},
                 ),
                 "height": (
                     "INT",
-                    {"default": 512, "min": 1, "max": MAX_RESOLUTION, "step": 8},
+                    {"default": 512, "min": 16, "max": MAX_RESOLUTION, "step": 8},
                 ),
                 "batch_size": (
                     "INT",
