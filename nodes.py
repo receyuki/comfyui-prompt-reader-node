@@ -1218,17 +1218,20 @@ class SDParameterExtractor:
 
     @staticmethod
     def parse_setting(settings):
-        pattern = re.compile(r"([^:,]+):\s*\(([^)]+)\)|([^:,]+):\s*([^,]+)")
+        pattern = re.compile(r"([^:,]+):\s*\(([^)]+)\)|([^:,]+):\s*\"([^)]+)\"|([^:,]+):\s*([^,]+)")
 
         matches = pattern.findall(settings)
 
         result = {}
         for match in matches:
-            key, value_paren, key_nonparen, value_nonparen = match
-            if key:
-                key = key.strip()
+            key_paren, value_paren, key_quotes, value_quotes, key_nonparen, value_nonparen = match
+            if key_paren:
+                key = key_paren.strip()
                 value = value_paren.strip()
                 value = tuple(v.strip() for v in value.split(","))
+            elif key_quotes:
+                key = key_quotes.strip()
+                value = value_quotes.strip()
             else:
                 key = key_nonparen.strip()
                 value = value_nonparen.strip()
