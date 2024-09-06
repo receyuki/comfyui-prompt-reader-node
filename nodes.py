@@ -971,6 +971,10 @@ class SDParameterGenerator:
             ),
         }
 
+    @classmethod
+    def VALIDATE_INPUTS(s, aspect_ratio):
+        return True
+
 
 class SDPromptMerger:
     @classmethod
@@ -1238,6 +1242,10 @@ class SDParameterExtractor:
             result[key] = value
 
         return result
+
+    @classmethod
+    def VALIDATE_INPUTS(s, parameter):
+        return True
 
 
 class SDLoraLoader:
