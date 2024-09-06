@@ -1,4 +1,22 @@
 # Change Log
+## v1.3.4
+> [!TIP]
+> Starting from v1.3, to support auto-detection on Civitai, `calculate_model_hash` will be renamed as 
+> `calculate_hash` and it will be enabled by default. Due to the addition of temporary storage of the model hash values,
+> the first image generated after switching to the new model will take more time to calculate the hash value, 
+> but it will not affect the generation speed afterwards until the server is restarted.
+
+> [!NOTE]
+> comfyui-prompt-reader-node is now published on the [Comfy Registry](https://www.comfyregistry.org/).
+
+- Add `Any Converter` node #76 #78
+- Fix the input validation of the `Parameter Generator` node #89
+- Fix the input validation of the `Parameter Extractor` node #90
+- Fix the `Parameter Generator` unable to choose standard resolutions #82
+- Fix the `Prompt Saver` unable to correctly handle filenames containing `.` #80
+- Update the `Parameter Extractor` node to support parsing quoted parameters #87 @spagatticode
+- Update PyProject Toml - License #85 @haohaocreates
+
 ## v1.3.3
 > [!TIP]
 > Starting from v1.3, to support auto-detection on Civitai, `calculate_model_hash` will be renamed as 
