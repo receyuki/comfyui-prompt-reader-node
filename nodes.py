@@ -22,6 +22,7 @@ import hashlib
 import piexif
 import piexif.helper
 
+import fnmatch
 
 from nodes import MAX_RESOLUTION
 from comfy.cli_args import args
@@ -1331,6 +1332,120 @@ class SDLoraSelector:
         return (lora_name, next_lora)
 
 
+class SDPromptReaderAuto(SDPromptReader):
+    current_index = 0
+    last_file = None
+    
+    @classmethod
+    def INPUT_TYPES(s):
+        input_dir = folder_paths.get_input_directory()
+        SDPromptReader.files = sorted([
+            f for f in os.listdir(input_dir)
+            if os.path.isfile(os.path.join(input_dir, f))
+        ])
+        
+        return {
+            "required": {
+                "directory": ("STRING", {"default": "input"}),
+                "sort_by": (["name", "date"], {"default": "name"}),
+                "direction": (["forward", "backward"], {"default": "forward"}),
+                "auto_next": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "parameter_index": ("INT", {"default": 0, "min": 0, "max": 255, "step": 1}),
+            }
+        }
+
+    FUNCTION = "load_image_auto"
+    OUTPUT_NODE = True
+
+    def load_image_auto(self, directory, sort_by, direction, auto_next, parameter_index=0):
+        # Handle directory path
+        if directory == "input":
+            input_dir = folder_paths.get_input_directory()
+        else:
+            input_dir = os.path.abspath(directory)
+            if not os.path.exists(input_dir):
+                return {
+                    "ui": {"text": ("", "", f"Directory not found: {input_dir}")},
+                    "result": self.error_output(
+                        error_message=f"Directory not found: {input_dir}"
+                    )["result"]
+                }
+        
+        # Get list of files and sort them
+        files = []
+        for f in os.listdir(input_dir):
+            file_path = os.path.join(input_dir, f)
+            if os.path.isfile(file_path) and any(f.lower().endswith(ext) for ext in SUPPORTED_FORMATS):
+                files.append((f, file_path))
+        
+        if not files:
+            error_msg = f"No supported image files found in: {input_dir}"
+            return {
+                "ui": {"text": ("", "", error_msg)},
+                "result": self.error_output(error_message=error_msg)["result"]
+            }
+            
+        # Sort files based on criteria
+        if sort_by == "date":
+            files.sort(key=lambda x: os.path.getmtime(x[1]))
+        else:  # sort by name
+            files.sort(key=lambda x: x[0])
+            
+        if direction == "backward":
+            files.reverse()
+
+        # Handle auto rotation
+        if auto_next:
+            if SDPromptReaderAuto.last_file != files[SDPromptReaderAuto.current_index][0]:
+                # Reset if the file list changed
+                SDPromptReaderAuto.current_index = 0
+                SDPromptReaderAuto.last_file = files[0][0]
+            else:
+                # Move to next file
+                SDPromptReaderAuto.current_index = (SDPromptReaderAuto.current_index + 1) % len(files)
+                SDPromptReaderAuto.last_file = files[SDPromptReaderAuto.current_index][0]
+        
+        # Load the current file
+        current_file = files[SDPromptReaderAuto.current_index][1]  # Use full path
+        output_to_terminal(f"Loading file {SDPromptReaderAuto.current_index + 1}/{len(files)}: {files[SDPromptReaderAuto.current_index][0]}")
+        
+        # Get result from parent class
+        result = super().load_image(current_file, parameter_index)
+        
+        # Add file count info to the UI display
+        if "ui" in result and "text" in result["ui"]:
+            positive, negative, settings = result["ui"]["text"]
+            file_info = f"\nFile {SDPromptReaderAuto.current_index + 1} of {len(files)}"
+            settings = f"{settings}{file_info}" if settings else file_info
+            result["ui"]["text"] = (positive, negative, settings)
+        
+        return result
+
+    @classmethod
+    def IS_CHANGED(s, directory, sort_by, direction, auto_next, parameter_index):
+        if auto_next:
+            # Force reload on every execution when auto_next is enabled
+            return float("NaN")
+        
+        # Check if directory contents have changed
+        if directory == "input":
+            dir_path = folder_paths.get_input_directory()
+        else:
+            dir_path = os.path.abspath(directory)
+        
+        try:
+            return os.listdir(dir_path)
+        except:
+            return None
+
+    @classmethod
+    def VALIDATE_INPUTS(s, directory, sort_by, direction, auto_next, parameter_index=0):
+        # Always return True since we validate paths during execution
+        return True
+
+
 NODE_CLASS_MAPPINGS = {
     "SDPromptReader": SDPromptReader,
     "SDPromptSaver": SDPromptSaver,
@@ -1342,6 +1457,7 @@ NODE_CLASS_MAPPINGS = {
     "SDParameterExtractor": SDParameterExtractor,
     "SDLoraLoader": SDLoraLoader,
     "SDLoraSelector": SDLoraSelector,
+    "SDPromptReaderAuto": SDPromptReaderAuto,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -1355,4 +1471,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SDParameterExtractor": "SD Parameter Extractor",
     "SDLoraLoader": "SD Lora Loader",
     "SDLoraSelector": "SD Lora Selector",
+    "SDPromptReaderAuto": "SD Prompt Reader Auto",
 }
